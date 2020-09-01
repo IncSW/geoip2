@@ -12,7 +12,7 @@ func TestDebug(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	record, err := reader.LookupCity(net.ParseIP("1.1.1.1"))
+	record, err := reader.LookupCity(net.ParseIP("81.2.69.142"))
 	if err != nil {
 		t.Fatal(err)
 	}
