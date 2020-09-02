@@ -5,8 +5,8 @@ import (
 	"strconv"
 )
 
-func readCityResponse(buffer []byte, offset uint) (*CityResponse, error) {
-	dataType, citySize, offset, err := readControl(buffer, offset)
+func readCityResult(buffer []byte, offset uint) (*CityResult, error) {
+	dataType, size, offset, err := readControl(buffer, offset)
 	if err != nil {
 		return nil, err
 	}
@@ -14,55 +14,55 @@ func readCityResponse(buffer []byte, offset uint) (*CityResponse, error) {
 		return nil, errors.New("invalid city type: " + strconv.Itoa(int(dataType)))
 	}
 	var key []byte
-	response := &CityResponse{}
-	for i := uint(0); i < citySize; i++ {
+	result := &CityResult{}
+	for i := uint(0); i < size; i++ {
 		key, offset, err = readMapKey(buffer, offset)
 		if err != nil {
 			return nil, err
 		}
 		switch b2s(key) {
 		case "city":
-			offset, err = readCity(&response.City, buffer, offset)
+			offset, err = readCity(&result.City, buffer, offset)
 			if err != nil {
 				return nil, err
 			}
 		case "continent":
-			offset, err = readContinent(&response.Continent, buffer, offset)
+			offset, err = readContinent(&result.Continent, buffer, offset)
 			if err != nil {
 				return nil, err
 			}
 		case "country":
-			offset, err = readCountry(&response.Country, buffer, offset)
+			offset, err = readCountry(&result.Country, buffer, offset)
 			if err != nil {
 				return nil, err
 			}
 		case "location":
-			offset, err = readLocation(&response.Location, buffer, offset)
+			offset, err = readLocation(&result.Location, buffer, offset)
 			if err != nil {
 				return nil, err
 			}
 		case "postal":
-			offset, err = readPostal(&response.Postal, buffer, offset)
+			offset, err = readPostal(&result.Postal, buffer, offset)
 			if err != nil {
 				return nil, err
 			}
 		case "registered_country":
-			offset, err = readCountry(&response.RegisteredCountry, buffer, offset)
+			offset, err = readCountry(&result.RegisteredCountry, buffer, offset)
 			if err != nil {
 				return nil, err
 			}
 		case "represented_country":
-			offset, err = readCountry(&response.RepresentedCountry, buffer, offset)
+			offset, err = readCountry(&result.RepresentedCountry, buffer, offset)
 			if err != nil {
 				return nil, err
 			}
 		case "subdivisions":
-			response.Subdivisions, offset, err = readSubdivisions(buffer, offset)
+			result.Subdivisions, offset, err = readSubdivisions(buffer, offset)
 			if err != nil {
 				return nil, err
 			}
 		case "traits":
-			offset, err = readTraits(&response.Traits, buffer, offset)
+			offset, err = readTraits(&result.Traits, buffer, offset)
 			if err != nil {
 				return nil, err
 			}
@@ -70,7 +70,7 @@ func readCityResponse(buffer []byte, offset uint) (*CityResponse, error) {
 			return nil, errors.New("unknown city response key: " + string(key) + ", type: " + strconv.Itoa(int(dataType)))
 		}
 	}
-	return response, nil
+	return result, nil
 }
 
 func readCity(city *City, buffer []byte, offset uint) (uint, error) {

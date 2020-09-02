@@ -30,14 +30,23 @@ type Continent struct {
 type Country struct {
 	GeoNameID         uint32
 	ISOCode           string
-	IsInEuropeanEnion bool
 	Names             map[string]string
-	Type              string
+	Confidence        uint8 // Enterprise [Country, RegisteredCountry]
+	IsInEuropeanEnion bool
+	Type              string // [RepresentedCountry]
+}
+
+type Subdivision struct {
+	GeoNameID  uint32
+	ISOCode    string
+	Names      map[string]string
+	Confidence uint8 // Enterprise
 }
 
 type City struct {
-	GeoNameID uint32
-	Names     map[string]string
+	GeoNameID  uint32
+	Names      map[string]string
+	Confidence uint8 // Enterprise
 }
 
 type Location struct {
@@ -49,20 +58,29 @@ type Location struct {
 }
 
 type Postal struct {
-	Code string
+	Code       string
+	Confidence uint8 // Enterprise
 }
 
 type Traits struct {
-	IsAnonymousProxy    bool
-	IsSatelliteProvider bool
-	StaticIPScore       float64
+	IsAnonymousProxy             bool
+	IsSatelliteProvider          bool
+	IsLegitimateProxy            bool    // Enterprise
+	StaticIPScore                float64 // Enterprise
+	AutonomousSystemNumber       uint32  // Enterprise
+	AutonomousSystemOrganization string  // Enterprise
+	ISP                          string  // Enterprise
+	Organization                 string  // Enterprise
+	ConnectionType               string  // Enterprise
+	Domain                       string  // Enterprise
+	UserType                     string  // Enterprise
 }
 
-type CityResponse struct {
+type CityResult struct {
 	Continent          Continent
-	City               City
 	Country            Country
 	Subdivisions       []Subdivision
+	City               City
 	Location           Location
 	Postal             Postal
 	RegisteredCountry  Country
@@ -70,13 +88,30 @@ type CityResponse struct {
 	Traits             Traits
 }
 
-type ISP struct {
+type ISPResult struct {
 	AutonomousSystemNumber       uint32
 	AutonomousSystemOrganization string
 	ISP                          string
 	Organization                 string
 }
 
-type ConnectionType struct {
+type ConnectionTypeResult struct {
 	ConnectionType string
+}
+
+type AnonymousIPResult struct {
+	IsAnonymous       bool
+	IsAnonymousVPN    bool
+	IsHostingProvider bool
+	IsPublicProxy     bool
+	IsTorExitNode     bool
+}
+
+type ASNResult struct {
+	AutonomousSystemNumber       uint32
+	AutonomousSystemOrganization string
+}
+
+type DomainResult struct {
+	Domain string
 }

@@ -5,12 +5,6 @@ import (
 	"strconv"
 )
 
-type Subdivision struct {
-	GeoNameID uint32
-	ISOCode   string
-	Names     map[string]string
-}
-
 func readSubdivisions(buffer []byte, offset uint) ([]Subdivision, uint, error) {
 	dataType, size, offset, err := readControl(buffer, offset)
 	if err != nil {

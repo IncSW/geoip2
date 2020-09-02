@@ -8,6 +8,8 @@ import (
 	"strconv"
 )
 
+var ErrNotFound = errors.New("not found")
+
 type Reader struct {
 	Metadata          *Metadata
 	buffer            []byte
@@ -18,58 +20,82 @@ type Reader struct {
 	nodeOffsetMult    uint
 }
 
-func (r *Reader) LookupCity(ip net.IP) (*CityResponse, error) {
-	if r.Metadata.DatabaseType != "GeoIP2-City" {
+func (r *Reader) LookupCity(ip net.IP) (*CityResult, error) {
+	if r.Metadata.DatabaseType != "GeoIP2-City" && r.Metadata.DatabaseType != "GeoIP2-Enterprise" {
 		return nil, errors.New("wrong MaxMind DB City type: " + r.Metadata.DatabaseType)
 	}
-	pointer, err := r.lookupPointer(ip)
+	offset, err := r.getOffset(ip)
 	if err != nil {
 		return nil, err
 	}
-	if pointer == 0 {
-		return nil, nil
-	}
-	offset := pointer - uint(r.Metadata.NodeCount) - uint(dataSectionSeparatorSize)
-	if offset >= uint(len(r.buffer)) {
-		return nil, errors.New("the MaxMind DB search tree is corrupt: " + strconv.Itoa(int(pointer)))
-	}
-	return readCityResponse(r.decoderBuffer, offset)
+	return readCityResult(r.decoderBuffer, offset)
 }
 
-func (r *Reader) LookupISP(ip net.IP) (*ISP, error) {
+func (r *Reader) LookupISP(ip net.IP) (*ISPResult, error) {
 	if r.Metadata.DatabaseType != "GeoIP2-ISP" {
 		return nil, errors.New("wrong MaxMind DB ISP type: " + r.Metadata.DatabaseType)
 	}
-	pointer, err := r.lookupPointer(ip)
+	offset, err := r.getOffset(ip)
 	if err != nil {
 		return nil, err
 	}
-	if pointer == 0 {
-		return nil, nil
-	}
-	offset := pointer - uint(r.Metadata.NodeCount) - uint(dataSectionSeparatorSize)
-	if offset >= uint(len(r.buffer)) {
-		return nil, errors.New("the MaxMind DB search tree is corrupt: " + strconv.Itoa(int(pointer)))
-	}
-	return readISP(r.decoderBuffer, offset)
+	return readISPResult(r.decoderBuffer, offset)
 }
 
 func (r *Reader) LookupConnectionType(ip net.IP) (string, error) {
 	if r.Metadata.DatabaseType != "GeoIP2-Connection-Type" {
 		return "", errors.New("wrong MaxMind DB ConnectionType type: " + r.Metadata.DatabaseType)
 	}
-	pointer, err := r.lookupPointer(ip)
+	offset, err := r.getOffset(ip)
 	if err != nil {
 		return "", err
 	}
-	if pointer == 0 {
-		return "", nil
+	return readConnectionType(r.decoderBuffer, offset)
+}
+
+func (r *Reader) LookupAnonymousIP(ip net.IP) (*AnonymousIPResult, error) {
+	if r.Metadata.DatabaseType != "GeoIP2-Anonymous-IP" {
+		return nil, errors.New("wrong MaxMind DB ISP type: " + r.Metadata.DatabaseType)
+	}
+	offset, err := r.getOffset(ip)
+	if err != nil {
+		return nil, err
+	}
+	return readAnonymousIPResult(r.decoderBuffer, offset)
+}
+
+func (r *Reader) LookupASNResult(ip net.IP) (*ASNResult, error) {
+	if r.Metadata.DatabaseType != "GeoLite2-ASN" {
+		return nil, errors.New("wrong MaxMind DB ISP type: " + r.Metadata.DatabaseType)
+	}
+	offset, err := r.getOffset(ip)
+	if err != nil {
+		return nil, err
+	}
+	return readASNResult(r.decoderBuffer, offset)
+}
+
+func (r *Reader) LookupDomain(ip net.IP) (string, error) {
+	if r.Metadata.DatabaseType != "GeoIP2-Domain" {
+		return "", errors.New("wrong MaxMind DB Domain type: " + r.Metadata.DatabaseType)
+	}
+	offset, err := r.getOffset(ip)
+	if err != nil {
+		return "", err
+	}
+	return readDomain(r.decoderBuffer, offset)
+}
+
+func (r *Reader) getOffset(ip net.IP) (uint, error) {
+	pointer, err := r.lookupPointer(ip)
+	if err != nil {
+		return 0, err
 	}
 	offset := pointer - uint(r.Metadata.NodeCount) - uint(dataSectionSeparatorSize)
 	if offset >= uint(len(r.buffer)) {
-		return "", errors.New("the MaxMind DB search tree is corrupt: " + strconv.Itoa(int(pointer)))
+		return 0, errors.New("the MaxMind DB search tree is corrupt: " + strconv.Itoa(int(pointer)))
 	}
-	return readConnectionType(r.decoderBuffer, offset)
+	return offset, nil
 }
 
 func (r *Reader) lookupPointer(ip net.IP) (uint, error) {
@@ -100,7 +126,7 @@ func (r *Reader) lookupPointer(ip net.IP) (uint, error) {
 		}
 	}
 	if node == nodeCount {
-		return 0, nil
+		return 0, ErrNotFound
 	} else if node > nodeCount {
 		return node, nil
 	}

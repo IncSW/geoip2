@@ -5,15 +5,15 @@ import (
 	"strconv"
 )
 
-func readConnectionType(buffer []byte, offset uint) (string, error) {
+func readDomain(buffer []byte, offset uint) (string, error) {
 	dataType, size, offset, err := readControl(buffer, offset)
 	if err != nil {
 		return "", err
 	}
-	result := &ConnectionTypeResult{}
+	result := &DomainResult{}
 	switch dataType {
 	case dataTypeMap:
-		_, err = readConnectionTypeMap(result, buffer, size, offset)
+		_, err = readDomainMap(result, buffer, size, offset)
 		if err != nil {
 			return "", err
 		}
@@ -27,19 +27,19 @@ func readConnectionType(buffer []byte, offset uint) (string, error) {
 			return "", err
 		}
 		if dataType != dataTypeMap {
-			return "", errors.New("invalid connectionType pointer type: " + strconv.Itoa(int(dataType)))
+			return "", errors.New("invalid domain pointer type: " + strconv.Itoa(int(dataType)))
 		}
-		_, err = readConnectionTypeMap(result, buffer, size, offset)
+		_, err = readDomainMap(result, buffer, size, offset)
 		if err != nil {
 			return "", err
 		}
 	default:
-		return "", errors.New("invalid connectionType type: " + strconv.Itoa(int(dataType)))
+		return "", errors.New("invalid domain type: " + strconv.Itoa(int(dataType)))
 	}
-	return result.ConnectionType, nil
+	return result.Domain, nil
 }
 
-func readConnectionTypeMap(result *ConnectionTypeResult, buffer []byte, mapSize uint, offset uint) (uint, error) {
+func readDomainMap(result *DomainResult, buffer []byte, mapSize uint, offset uint) (uint, error) {
 	var key []byte
 	var err error
 	for i := uint(0); i < mapSize; i++ {
@@ -48,13 +48,13 @@ func readConnectionTypeMap(result *ConnectionTypeResult, buffer []byte, mapSize 
 			return 0, err
 		}
 		switch b2s(key) {
-		case "connection_type":
-			result.ConnectionType, offset, err = readString(buffer, offset)
+		case "domain":
+			result.Domain, offset, err = readString(buffer, offset)
 			if err != nil {
 				return 0, err
 			}
 		default:
-			return 0, errors.New("unknown connectionType key: " + string(key))
+			return 0, errors.New("unknown domain key: " + string(key))
 		}
 	}
 	return offset, nil

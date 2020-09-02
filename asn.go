@@ -5,15 +5,15 @@ import (
 	"strconv"
 )
 
-func readISPResult(buffer []byte, offset uint) (*ISPResult, error) {
+func readASNResult(buffer []byte, offset uint) (*ASNResult, error) {
 	dataType, size, offset, err := readControl(buffer, offset)
 	if err != nil {
 		return nil, err
 	}
-	result := &ISPResult{}
+	result := &ASNResult{}
 	switch dataType {
 	case dataTypeMap:
-		_, err = readISPMap(result, buffer, size, offset)
+		_, err = readASNMap(result, buffer, size, offset)
 		if err != nil {
 			return nil, err
 		}
@@ -27,19 +27,19 @@ func readISPResult(buffer []byte, offset uint) (*ISPResult, error) {
 			return nil, err
 		}
 		if dataType != dataTypeMap {
-			return nil, errors.New("invalid isp pointer type: " + strconv.Itoa(int(dataType)))
+			return nil, errors.New("invalid asn pointer type: " + strconv.Itoa(int(dataType)))
 		}
-		_, err = readISPMap(result, buffer, size, offset)
+		_, err = readASNMap(result, buffer, size, offset)
 		if err != nil {
 			return nil, err
 		}
 	default:
-		return nil, errors.New("invalid isp type: " + strconv.Itoa(int(dataType)))
+		return nil, errors.New("invalid asn type: " + strconv.Itoa(int(dataType)))
 	}
 	return result, nil
 }
 
-func readISPMap(result *ISPResult, buffer []byte, mapSize uint, offset uint) (uint, error) {
+func readASNMap(result *ASNResult, buffer []byte, mapSize uint, offset uint) (uint, error) {
 	var key []byte
 	var err error
 	for i := uint(0); i < mapSize; i++ {
@@ -55,16 +55,6 @@ func readISPMap(result *ISPResult, buffer []byte, mapSize uint, offset uint) (ui
 			}
 		case "autonomous_system_organization":
 			result.AutonomousSystemOrganization, offset, err = readString(buffer, offset)
-			if err != nil {
-				return 0, err
-			}
-		case "isp":
-			result.ISP, offset, err = readString(buffer, offset)
-			if err != nil {
-				return 0, err
-			}
-		case "organization":
-			result.Organization, offset, err = readString(buffer, offset)
 			if err != nil {
 				return 0, err
 			}
