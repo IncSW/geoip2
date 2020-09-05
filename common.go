@@ -87,6 +87,33 @@ func readFloat64(buffer []byte, offset uint) (float64, uint, error) {
 	}
 }
 
+func readUInt8(buffer []byte, offset uint) (uint8, uint, error) { // TODO: fix dataType
+	dataType, size, offset, err := readControl(buffer, offset)
+	if err != nil {
+		return 0, 0, err
+	}
+	switch dataType {
+	case dataTypeUint16, dataTypeUint32:
+		newOffset := offset + size
+		return uint8(bytesToUInt64(buffer[offset:newOffset])), newOffset, nil
+	case dataTypePointer:
+		pointer, newOffset, err := readPointer(buffer, size, offset)
+		if err != nil {
+			return 0, 0, err
+		}
+		dataType, size, offset, err := readControl(buffer, pointer)
+		if err != nil {
+			return 0, 0, err
+		}
+		if dataType != dataTypeUint16 && dataType != dataTypeUint32 {
+			return 0, 0, errors.New("invalid uint8 pointer type: " + strconv.Itoa(int(dataType)))
+		}
+		return uint8(bytesToUInt64(buffer[offset : offset+size])), newOffset, nil
+	default:
+		return 0, 0, errors.New("invalid uint8 type: " + strconv.Itoa(int(dataType)))
+	}
+}
+
 func readUInt16(buffer []byte, offset uint) (uint16, uint, error) {
 	dataType, size, offset, err := readControl(buffer, offset)
 	if err != nil {

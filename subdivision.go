@@ -101,6 +101,11 @@ func readSubdivisionMap(subdivision *Subdivision, buffer []byte, mapSize uint, o
 			if err != nil {
 				return 0, err
 			}
+		case "confidence":
+			subdivision.Confidence, offset, err = readUInt8(buffer, offset)
+			if err != nil {
+				return 0, err
+			}
 		default:
 			return 0, errors.New("unknown subdivision key: " + string(key))
 		}

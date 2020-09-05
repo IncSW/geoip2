@@ -3,15 +3,14 @@ package geoip2
 import (
 	"bytes"
 	"errors"
-	"io/ioutil"
 	"net"
 	"strconv"
 )
 
 var ErrNotFound = errors.New("not found")
 
-type Reader struct {
-	Metadata          *Metadata
+type reader struct {
+	metadata          *Metadata
 	buffer            []byte
 	decoderBuffer     []byte
 	nodeBuffer        []byte
@@ -20,85 +19,19 @@ type Reader struct {
 	nodeOffsetMult    uint
 }
 
-func (r *Reader) LookupCity(ip net.IP) (*CityResult, error) {
-	if r.Metadata.DatabaseType != "GeoIP2-City" && r.Metadata.DatabaseType != "GeoIP2-Enterprise" {
-		return nil, errors.New("wrong MaxMind DB City type: " + r.Metadata.DatabaseType)
-	}
-	offset, err := r.getOffset(ip)
-	if err != nil {
-		return nil, err
-	}
-	return readCityResult(r.decoderBuffer, offset)
-}
-
-func (r *Reader) LookupISP(ip net.IP) (*ISPResult, error) {
-	if r.Metadata.DatabaseType != "GeoIP2-ISP" {
-		return nil, errors.New("wrong MaxMind DB ISP type: " + r.Metadata.DatabaseType)
-	}
-	offset, err := r.getOffset(ip)
-	if err != nil {
-		return nil, err
-	}
-	return readISPResult(r.decoderBuffer, offset)
-}
-
-func (r *Reader) LookupConnectionType(ip net.IP) (string, error) {
-	if r.Metadata.DatabaseType != "GeoIP2-Connection-Type" {
-		return "", errors.New("wrong MaxMind DB ConnectionType type: " + r.Metadata.DatabaseType)
-	}
-	offset, err := r.getOffset(ip)
-	if err != nil {
-		return "", err
-	}
-	return readConnectionType(r.decoderBuffer, offset)
-}
-
-func (r *Reader) LookupAnonymousIP(ip net.IP) (*AnonymousIPResult, error) {
-	if r.Metadata.DatabaseType != "GeoIP2-Anonymous-IP" {
-		return nil, errors.New("wrong MaxMind DB ISP type: " + r.Metadata.DatabaseType)
-	}
-	offset, err := r.getOffset(ip)
-	if err != nil {
-		return nil, err
-	}
-	return readAnonymousIPResult(r.decoderBuffer, offset)
-}
-
-func (r *Reader) LookupASNResult(ip net.IP) (*ASNResult, error) {
-	if r.Metadata.DatabaseType != "GeoLite2-ASN" {
-		return nil, errors.New("wrong MaxMind DB ISP type: " + r.Metadata.DatabaseType)
-	}
-	offset, err := r.getOffset(ip)
-	if err != nil {
-		return nil, err
-	}
-	return readASNResult(r.decoderBuffer, offset)
-}
-
-func (r *Reader) LookupDomain(ip net.IP) (string, error) {
-	if r.Metadata.DatabaseType != "GeoIP2-Domain" {
-		return "", errors.New("wrong MaxMind DB Domain type: " + r.Metadata.DatabaseType)
-	}
-	offset, err := r.getOffset(ip)
-	if err != nil {
-		return "", err
-	}
-	return readDomain(r.decoderBuffer, offset)
-}
-
-func (r *Reader) getOffset(ip net.IP) (uint, error) {
+func (r *reader) getOffset(ip net.IP) (uint, error) {
 	pointer, err := r.lookupPointer(ip)
 	if err != nil {
 		return 0, err
 	}
-	offset := pointer - uint(r.Metadata.NodeCount) - uint(dataSectionSeparatorSize)
+	offset := pointer - uint(r.metadata.NodeCount) - uint(dataSectionSeparatorSize)
 	if offset >= uint(len(r.buffer)) {
 		return 0, errors.New("the MaxMind DB search tree is corrupt: " + strconv.Itoa(int(pointer)))
 	}
 	return offset, nil
 }
 
-func (r *Reader) lookupPointer(ip net.IP) (uint, error) {
+func (r *reader) lookupPointer(ip net.IP) (uint, error) {
 	if ip == nil {
 		return 0, errors.New("IP cannot be nil")
 	}
@@ -106,7 +39,7 @@ func (r *Reader) lookupPointer(ip net.IP) (uint, error) {
 	if ipV4 != nil {
 		ip = ipV4
 	}
-	if len(ip) == 16 && r.Metadata.IPVersion == 4 {
+	if len(ip) == 16 && r.metadata.IPVersion == 4 {
 		return 0, errors.New("cannot look up an IPv6 address in an IPv4-only database")
 	}
 	bitCount := uint(len(ip)) * 8
@@ -114,7 +47,7 @@ func (r *Reader) lookupPointer(ip net.IP) (uint, error) {
 	if bitCount == 32 {
 		node = r.ipV4Start
 	}
-	nodeCount := uint(r.Metadata.NodeCount)
+	nodeCount := uint(r.metadata.NodeCount)
 	i := uint(0)
 	for ; i < bitCount && node < nodeCount; i++ {
 		bit := 1 & (ip[i>>3] >> (7 - (i % 8)))
@@ -133,8 +66,8 @@ func (r *Reader) lookupPointer(ip net.IP) (uint, error) {
 	return 0, errors.New("invalid node in search tree")
 }
 
-func (r *Reader) readLeft(nodeNumber uint) uint {
-	switch r.Metadata.RecordSize {
+func (r *reader) readLeft(nodeNumber uint) uint {
+	switch r.metadata.RecordSize {
 	case 28:
 		return ((uint(r.nodeBuffer[nodeNumber+3]) & 0xF0) << 20) | (uint(r.nodeBuffer[nodeNumber]) << 16) | (uint(r.nodeBuffer[nodeNumber+1]) << 8) | uint(r.nodeBuffer[nodeNumber+2])
 	case 24:
@@ -144,8 +77,8 @@ func (r *Reader) readLeft(nodeNumber uint) uint {
 	}
 }
 
-func (r *Reader) readRight(nodeNumber uint) uint {
-	switch r.Metadata.RecordSize {
+func (r *reader) readRight(nodeNumber uint) uint {
+	switch r.metadata.RecordSize {
 	case 28:
 		return ((uint(r.nodeBuffer[nodeNumber+3]) & 0x0F) << 24) | (uint(r.nodeBuffer[nodeNumber+4]) << 16) | (uint(r.nodeBuffer[nodeNumber+5]) << 8) | uint(r.nodeBuffer[nodeNumber+6])
 	case 24:
@@ -155,15 +88,7 @@ func (r *Reader) readRight(nodeNumber uint) uint {
 	}
 }
 
-func NewReaderFromFile(filename string) (*Reader, error) {
-	buffer, err := ioutil.ReadFile(filename)
-	if err != nil {
-		return nil, err
-	}
-	return NewReader(buffer)
-}
-
-func NewReader(buffer []byte) (*Reader, error) {
+func newReader(buffer []byte) (*reader, error) {
 	metadataStart := bytes.LastIndex(buffer, metadataStartMarker)
 	metadata, err := readMetadata(buffer[metadataStart+len(metadataStartMarker):])
 	if err != nil {
@@ -175,8 +100,8 @@ func NewReader(buffer []byte) (*Reader, error) {
 	if dataSectionStart > uint(metadataStart) {
 		return nil, errors.New("the MaxMind DB contains invalid metadata")
 	}
-	reader := &Reader{
-		Metadata:       metadata,
+	reader := &reader{
+		metadata:       metadata,
 		buffer:         buffer,
 		decoderBuffer:  buffer[searchTreeSize+dataSectionSeparatorSize : metadataStart],
 		nodeBuffer:     buffer[:searchTreeSize],

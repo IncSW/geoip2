@@ -1,45 +1,8 @@
 package geoip2
 
-import (
-	"errors"
-	"strconv"
-)
+import "errors"
 
-func readConnectionType(buffer []byte, offset uint) (string, error) {
-	dataType, size, offset, err := readControl(buffer, offset)
-	if err != nil {
-		return "", err
-	}
-	result := &ConnectionTypeResult{}
-	switch dataType {
-	case dataTypeMap:
-		_, err = readConnectionTypeMap(result, buffer, size, offset)
-		if err != nil {
-			return "", err
-		}
-	case dataTypePointer:
-		pointer, _, err := readPointer(buffer, size, offset)
-		if err != nil {
-			return "", err
-		}
-		dataType, size, offset, err := readControl(buffer, pointer)
-		if err != nil {
-			return "", err
-		}
-		if dataType != dataTypeMap {
-			return "", errors.New("invalid connectionType pointer type: " + strconv.Itoa(int(dataType)))
-		}
-		_, err = readConnectionTypeMap(result, buffer, size, offset)
-		if err != nil {
-			return "", err
-		}
-	default:
-		return "", errors.New("invalid connectionType type: " + strconv.Itoa(int(dataType)))
-	}
-	return result.ConnectionType, nil
-}
-
-func readConnectionTypeMap(result *ConnectionTypeResult, buffer []byte, mapSize uint, offset uint) (uint, error) {
+func readConnectionTypeMap(result *ConnectionType, buffer []byte, mapSize uint, offset uint) (uint, error) {
 	var key []byte
 	var err error
 	for i := uint(0); i < mapSize; i++ {

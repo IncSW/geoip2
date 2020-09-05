@@ -16,11 +16,11 @@ Inspired by [oschwald/geoip2-golang](https://github.com/oschwald/geoip2-golang).
 ```go
 import "github.com/IncSW/geoip2"
 
-reader, err := geoip2.NewReaderFromFile("path/to/GeoIP2-City.mmdb")
+reader, err := geoip2.NewCityReaderFromFile("path/to/GeoIP2-City.mmdb")
 if err != nil {
 	panic(err)
 }
-record, err := reader.LookupCity(net.ParseIP("81.2.69.142"))
+record, err := reader.Lookup(net.ParseIP("81.2.69.142"))
 if err != nil {
 	panic(err)
 }

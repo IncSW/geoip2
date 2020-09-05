@@ -31,9 +31,9 @@ type Country struct {
 	GeoNameID         uint32
 	ISOCode           string
 	Names             map[string]string
-	Confidence        uint8 // Enterprise [Country, RegisteredCountry]
 	IsInEuropeanEnion bool
 	Type              string // [RepresentedCountry]
+	Confidence        uint8  // Enterprise [Country, RegisteredCountry]
 }
 
 type Subdivision struct {
@@ -76,6 +76,14 @@ type Traits struct {
 	UserType                     string  // Enterprise
 }
 
+type CountryResult struct {
+	Continent          Continent
+	Country            Country
+	RegisteredCountry  Country
+	RepresentedCountry Country
+	Traits             Traits
+}
+
 type CityResult struct {
 	Continent          Continent
 	Country            Country
@@ -88,18 +96,18 @@ type CityResult struct {
 	Traits             Traits
 }
 
-type ISPResult struct {
+type ISP struct {
 	AutonomousSystemNumber       uint32
 	AutonomousSystemOrganization string
 	ISP                          string
 	Organization                 string
 }
 
-type ConnectionTypeResult struct {
+type ConnectionType struct {
 	ConnectionType string
 }
 
-type AnonymousIPResult struct {
+type AnonymousIP struct {
 	IsAnonymous       bool
 	IsAnonymousVPN    bool
 	IsHostingProvider bool
@@ -107,11 +115,11 @@ type AnonymousIPResult struct {
 	IsTorExitNode     bool
 }
 
-type ASNResult struct {
+type ASN struct {
 	AutonomousSystemNumber       uint32
 	AutonomousSystemOrganization string
 }
 
-type DomainResult struct {
+type Domain struct {
 	Domain string
 }

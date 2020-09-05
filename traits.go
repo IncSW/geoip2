@@ -54,8 +54,48 @@ func readTraitsMap(traits *Traits, buffer []byte, mapSize uint, offset uint) (ui
 			if err != nil {
 				return 0, err
 			}
+		case "is_legitimate_proxy":
+			traits.IsLegitimateProxy, offset, err = readBool(buffer, offset)
+			if err != nil {
+				return 0, err
+			}
 		case "static_ip_score":
 			traits.StaticIPScore, offset, err = readFloat64(buffer, offset)
+			if err != nil {
+				return 0, err
+			}
+		case "autonomous_system_number":
+			traits.AutonomousSystemNumber, offset, err = readUInt32(buffer, offset)
+			if err != nil {
+				return 0, err
+			}
+		case "autonomous_system_organization":
+			traits.AutonomousSystemOrganization, offset, err = readString(buffer, offset)
+			if err != nil {
+				return 0, err
+			}
+		case "isp":
+			traits.ISP, offset, err = readString(buffer, offset)
+			if err != nil {
+				return 0, err
+			}
+		case "organization":
+			traits.Organization, offset, err = readString(buffer, offset)
+			if err != nil {
+				return 0, err
+			}
+		case "connection_type":
+			traits.ConnectionType, offset, err = readString(buffer, offset)
+			if err != nil {
+				return 0, err
+			}
+		case "domain":
+			traits.Domain, offset, err = readString(buffer, offset)
+			if err != nil {
+				return 0, err
+			}
+		case "user_type":
+			traits.UserType, offset, err = readString(buffer, offset)
 			if err != nil {
 				return 0, err
 			}

@@ -49,6 +49,11 @@ func readPostalMap(postal *Postal, buffer []byte, mapSize uint, offset uint) (ui
 			if err != nil {
 				return 0, err
 			}
+		case "confidence":
+			postal.Confidence, offset, err = readUInt8(buffer, offset)
+			if err != nil {
+				return 0, err
+			}
 		default:
 			return 0, errors.New("unknown postal key: " + string(key))
 		}

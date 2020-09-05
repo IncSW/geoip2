@@ -69,6 +69,11 @@ func readCountryMap(country *Country, buffer []byte, mapSize uint, offset uint) 
 			if err != nil {
 				return 0, err
 			}
+		case "confidence":
+			country.Confidence, offset, err = readUInt8(buffer, offset)
+			if err != nil {
+				return 0, err
+			}
 		default:
 			return 0, errors.New("unknown country key: " + string(key))
 		}
