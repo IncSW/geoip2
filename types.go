@@ -33,20 +33,20 @@ type Country struct {
 	Names             map[string]string
 	IsInEuropeanEnion bool
 	Type              string // [RepresentedCountry]
-	Confidence        uint8  // Enterprise [Country, RegisteredCountry]
+	Confidence        uint16 // Enterprise [Country, RegisteredCountry]
 }
 
 type Subdivision struct {
 	GeoNameID  uint32
 	ISOCode    string
 	Names      map[string]string
-	Confidence uint8 // Enterprise
+	Confidence uint16 // Enterprise
 }
 
 type City struct {
 	GeoNameID  uint32
 	Names      map[string]string
-	Confidence uint8 // Enterprise
+	Confidence uint16 // Enterprise
 }
 
 type Location struct {
@@ -59,7 +59,7 @@ type Location struct {
 
 type Postal struct {
 	Code       string
-	Confidence uint8 // Enterprise
+	Confidence uint16 // Enterprise
 }
 
 type Traits struct {

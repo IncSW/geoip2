@@ -55,7 +55,7 @@ func readCityMap(city *City, buffer []byte, mapSize uint, offset uint) (uint, er
 				return 0, err
 			}
 		case "confidence":
-			city.Confidence, offset, err = readUInt8(buffer, offset)
+			city.Confidence, offset, err = readUInt16(buffer, offset)
 			if err != nil {
 				return 0, err
 			}

@@ -102,7 +102,7 @@ func readSubdivisionMap(subdivision *Subdivision, buffer []byte, mapSize uint, o
 				return 0, err
 			}
 		case "confidence":
-			subdivision.Confidence, offset, err = readUInt8(buffer, offset)
+			subdivision.Confidence, offset, err = readUInt16(buffer, offset)
 			if err != nil {
 				return 0, err
 			}

@@ -50,7 +50,7 @@ func readPostalMap(postal *Postal, buffer []byte, mapSize uint, offset uint) (ui
 				return 0, err
 			}
 		case "confidence":
-			postal.Confidence, offset, err = readUInt8(buffer, offset)
+			postal.Confidence, offset, err = readUInt16(buffer, offset)
 			if err != nil {
 				return 0, err
 			}
