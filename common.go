@@ -173,10 +173,25 @@ func readBool(buffer []byte, offset uint) (bool, uint, error) {
 	if err != nil {
 		return false, 0, err
 	}
-	if dataType != dataTypeBool {
+	switch dataType {
+	case dataTypeBool:
+		return size != 0, offset, nil
+	case dataTypePointer:
+		pointer, newOffset, err := readPointer(buffer, size, offset)
+		if err != nil {
+			return false, 0, err
+		}
+		dataType, size, _, err := readControl(buffer, pointer)
+		if err != nil {
+			return false, 0, err
+		}
+		if dataType != dataTypeBool {
+			return false, 0, errors.New("invalid bool pointer type: " + strconv.Itoa(int(dataType)))
+		}
+		return size != 0, newOffset, nil
+	default:
 		return false, 0, errors.New("invalid bool type: " + strconv.Itoa(int(dataType)))
 	}
-	return size != 0, offset, nil
 }
 
 func readString(buffer []byte, offset uint) (string, uint, error) {

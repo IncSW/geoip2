@@ -5,3 +5,7 @@ testdata/GeoIP2-ISP.mmdb
 testdata/GeoLite2-ASN.mmdb
 testdata/GeoLite2-City.mmdb
 testdata/GeoLite2-Country.mmdb
+
+testdata/GeoIP2-Anonymous-IP-Test.mmdb
+testdata/GeoIP2-Domain-Test.mmdb
+testdata/GeoIP2-Enterprise-Test.mmdb

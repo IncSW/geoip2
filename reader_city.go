@@ -105,3 +105,11 @@ func NewCityReaderFromFile(filename string) (*CityReader, error) {
 	}
 	return NewCityReader(buffer)
 }
+
+func NewEnterpriseReader(buffer []byte) (*CityReader, error) {
+	return NewCityReader(buffer)
+}
+
+func NewEnterpriseReaderFromFile(filename string) (*CityReader, error) {
+	return NewCityReaderFromFile(filename)
+}

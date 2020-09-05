@@ -69,9 +69,75 @@ func TestReader(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+}
 
-	// TODO: GeoIP2-Anonymous-IP
-	// TODO: GeoIP2-Domain
+func TestDomain(t *testing.T) {
+	reader, err := NewDomainReaderFromFile("testdata/GeoIP2-Domain-Test.mmdb")
+	if err != nil {
+		t.Fatal(err)
+	}
+	record, err := reader.Lookup(net.ParseIP("1.2.0.0"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if record != "maxmind.com" {
+		t.Fatal()
+	}
+}
+
+func TestAnonymousIP(t *testing.T) {
+	reader, err := NewAnonymousIPReaderFromFile("testdata/GeoIP2-Anonymous-IP-Test.mmdb")
+	if err != nil {
+		t.Fatal(err)
+	}
+	record, err := reader.Lookup(net.ParseIP("1.2.0.0"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if record.IsAnonymous != true {
+		t.Fatal()
+	}
+	if record.IsAnonymousVPN != true {
+		t.Fatal()
+	}
+	if record.IsHostingProvider != false {
+		t.Fatal()
+	}
+	if record.IsPublicProxy != false {
+		t.Fatal()
+	}
+	if record.IsTorExitNode != false {
+		t.Fatal()
+	}
+}
+
+func TestEnterprise(t *testing.T) {
+	reader, err := NewEnterpriseReaderFromFile("testdata/GeoIP2-Enterprise-Test.mmdb")
+	if err != nil {
+		t.Fatal(err)
+	}
+	record, err := reader.Lookup(net.ParseIP("74.209.24.0"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if record.City.Confidence != 11 {
+		t.Fatal()
+	}
+	if record.Traits.AutonomousSystemNumber != 14671 {
+		t.Fatal()
+	}
+	if record.Traits.AutonomousSystemOrganization != "FairPoint Communications" {
+		t.Fatal()
+	}
+	if record.Traits.ConnectionType != "Cable/DSL" {
+		t.Fatal()
+	}
+	if record.Traits.Domain != "frpt.net" {
+		t.Fatal()
+	}
+	if record.Traits.StaticIPScore != 0.34 {
+		t.Fatal()
+	}
 }
 
 func TestBench(t *testing.T) {
