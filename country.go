@@ -60,7 +60,7 @@ func readCountryMap(country *Country, buffer []byte, mapSize uint, offset uint) 
 				return 0, err
 			}
 		case "is_in_european_union":
-			country.IsInEuropeanEnion, offset, err = readBool(buffer, offset)
+			country.IsInEuropeanUnion, offset, err = readBool(buffer, offset)
 			if err != nil {
 				return 0, err
 			}

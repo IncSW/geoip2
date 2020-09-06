@@ -31,7 +31,7 @@ type Country struct {
 	GeoNameID         uint32
 	ISOCode           string
 	Names             map[string]string
-	IsInEuropeanEnion bool
+	IsInEuropeanUnion bool
 	Type              string // [RepresentedCountry]
 	Confidence        uint16 // Enterprise [Country, RegisteredCountry]
 }
