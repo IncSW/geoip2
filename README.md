@@ -1,5 +1,6 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 [![Go Report Card](https://goreportcard.com/badge/github.com/IncSW/geoip2?style=flat-square)](https://goreportcard.com/report/github.com/IncSW/geoip2)
+[![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://pkg.go.dev/github.com/IncSW/geoip2?tab=doc)
 
 # GeoIP2 Reader for Go
 
