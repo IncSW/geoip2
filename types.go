@@ -28,33 +28,33 @@ type Continent struct {
 }
 
 type Country struct {
-	GeoNameID         uint32
 	ISOCode           string
 	Names             map[string]string
-	IsInEuropeanUnion bool
 	Type              string // [RepresentedCountry]
+	GeoNameID         uint32
 	Confidence        uint16 // Enterprise [Country, RegisteredCountry]
+	IsInEuropeanUnion bool
 }
 
 type Subdivision struct {
-	GeoNameID  uint32
 	ISOCode    string
 	Names      map[string]string
+	GeoNameID  uint32
 	Confidence uint16 // Enterprise
 }
 
 type City struct {
-	GeoNameID  uint32
 	Names      map[string]string
+	GeoNameID  uint32
 	Confidence uint16 // Enterprise
 }
 
 type Location struct {
-	AccuracyRadius uint16
-	MetroCode      uint16
 	Latitude       float64
 	Longitude      float64
 	TimeZone       string
+	AccuracyRadius uint16
+	MetroCode      uint16
 }
 
 type Postal struct {
@@ -63,17 +63,17 @@ type Postal struct {
 }
 
 type Traits struct {
-	IsAnonymousProxy             bool
-	IsSatelliteProvider          bool
-	IsLegitimateProxy            bool    // Enterprise
 	StaticIPScore                float64 // Enterprise
-	AutonomousSystemNumber       uint32  // Enterprise
-	AutonomousSystemOrganization string  // Enterprise
 	ISP                          string  // Enterprise
 	Organization                 string  // Enterprise
 	ConnectionType               string  // Enterprise
 	Domain                       string  // Enterprise
 	UserType                     string  // Enterprise
+	AutonomousSystemOrganization string  // Enterprise
+	AutonomousSystemNumber       uint32  // Enterprise
+	IsLegitimateProxy            bool    // Enterprise
+	IsAnonymousProxy             bool
+	IsSatelliteProvider          bool
 }
 
 type CountryResult struct {
