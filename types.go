@@ -108,11 +108,12 @@ type ConnectionType struct {
 }
 
 type AnonymousIP struct {
-	IsAnonymous       bool
-	IsAnonymousVPN    bool
-	IsHostingProvider bool
-	IsPublicProxy     bool
-	IsTorExitNode     bool
+	IsAnonymous        bool
+	IsAnonymousVPN     bool
+	IsHostingProvider  bool
+	IsPublicProxy      bool
+	IsTorExitNode      bool
+	IsResidentialProxy bool
 }
 
 type ASN struct {

@@ -36,6 +36,11 @@ func readAnonymousIPMap(result *AnonymousIP, buffer []byte, mapSize uint, offset
 			if err != nil {
 				return 0, err
 			}
+		case "is_residential_proxy":
+			result.IsResidentialProxy, offset, err = readBool(buffer, offset)
+			if err != nil {
+				return 0, err
+			}
 		default:
 			return 0, errors.New("unknown isp key: " + string(key))
 		}
