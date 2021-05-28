@@ -53,6 +53,13 @@ func TestAnonymousIP(t *testing.T) {
 	}
 }
 
+func TestReaderZeroLength(t *testing.T) {
+	_, err := newReader([]byte{})
+	if err == nil {
+		t.Fatal()
+	}
+}
+
 func TestCity(t *testing.T) {
 	reader, err := NewCityReaderFromFile("testdata/GeoIP2-City-Test.mmdb")
 	if err != nil {

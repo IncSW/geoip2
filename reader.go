@@ -89,6 +89,10 @@ func (r *reader) readRight(nodeNumber uint) uint {
 }
 
 func newReader(buffer []byte) (*reader, error) {
+	if len(buffer) == 0 {
+		return nil, errors.New("buffer is empty")
+	}
+
 	metadataStart := bytes.LastIndex(buffer, metadataStartMarker)
 	metadata, err := readMetadata(buffer[metadataStart+len(metadataStartMarker):])
 	if err != nil {
