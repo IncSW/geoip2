@@ -297,20 +297,13 @@ func readMapKey(buffer []byte, offset uint) ([]byte, uint, error) {
 
 func readStringSlice(buffer []byte, sliceSize uint, offset uint) ([]string, uint, error) {
 	var err error
-	var dataType byte
-	var size uint
+	var value string
 	result := make([]string, sliceSize)
 	for i := uint(0); i < sliceSize; i++ {
-		dataType, size, offset, err = readControl(buffer, offset)
+		value, offset, err = readString(buffer, offset)
 		if err != nil {
 			return nil, 0, err
 		}
-		if dataType != dataTypeString {
-			return nil, 0, errors.New("invalid data type: " + strconv.Itoa(int(dataType)))
-		}
-		newOffset := offset + size
-		value := b2s(buffer[offset:newOffset])
-		offset = newOffset
 		result[i] = value
 	}
 	return result, offset, nil
