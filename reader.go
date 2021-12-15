@@ -122,3 +122,15 @@ func newReader(buffer []byte) (*reader, error) {
 	}
 	return reader, nil
 }
+
+func isExpectedDatabaseType(databaseType string, expectedTypes ...string) bool {
+	if len(expectedTypes) == 0 {
+		return true
+	}
+	for _, expectedType := range expectedTypes {
+		if databaseType == expectedType {
+			return true
+		}
+	}
+	return false
+}

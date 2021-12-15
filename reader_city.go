@@ -83,19 +83,21 @@ func (r *CityReader) Lookup(ip net.IP) (*CityResult, error) {
 	return result, nil
 }
 
-func NewCityReader(buffer []byte) (*CityReader, error) {
+func NewCityReaderType(buffer []byte, expectedTypes ...string) (*CityReader, error) {
 	reader, err := newReader(buffer)
 	if err != nil {
 		return nil, err
 	}
-	if reader.metadata.DatabaseType != "GeoIP2-City" &&
-		reader.metadata.DatabaseType != "GeoLite2-City" &&
-		reader.metadata.DatabaseType != "GeoIP2-Enterprise" {
-		return nil, errors.New("wrong MaxMind DB City type: " + reader.metadata.DatabaseType)
+	if !isExpectedDatabaseType(reader.metadata.DatabaseType, expectedTypes...) {
+		return nil, errors.New("wrong database City type: " + reader.metadata.DatabaseType)
 	}
 	return &CityReader{
 		reader: reader,
 	}, nil
+}
+
+func NewCityReader(buffer []byte) (*CityReader, error) {
+	return NewCityReaderType(buffer, "GeoIP2-City", "GeoLite2-City", "GeoIP2-Enterprise")
 }
 
 func NewCityReaderFromFile(filename string) (*CityReader, error) {

@@ -49,17 +49,21 @@ func (r *DomainReader) Lookup(ip net.IP) (string, error) {
 	return result.Domain, nil
 }
 
-func NewDomainReader(buffer []byte) (*DomainReader, error) {
+func NewDomainReaderType(buffer []byte, expectedTypes ...string) (*DomainReader, error) {
 	reader, err := newReader(buffer)
 	if err != nil {
 		return nil, err
 	}
-	if reader.metadata.DatabaseType != "GeoIP2-Domain" {
-		return nil, errors.New("wrong MaxMind DB Domain type: " + reader.metadata.DatabaseType)
+	if !isExpectedDatabaseType(reader.metadata.DatabaseType, expectedTypes...) {
+		return nil, errors.New("wrong database Domain type: " + reader.metadata.DatabaseType)
 	}
 	return &DomainReader{
 		reader: reader,
 	}, nil
+}
+
+func NewDomainReader(buffer []byte) (*DomainReader, error) {
+	return NewDomainReaderType(buffer, "GeoIP2-Domain")
 }
 
 func NewDomainReaderFromFile(filename string) (*DomainReader, error) {

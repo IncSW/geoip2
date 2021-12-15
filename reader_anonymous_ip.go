@@ -49,17 +49,21 @@ func (r *AnonymousIPReader) Lookup(ip net.IP) (*AnonymousIP, error) {
 	return result, nil
 }
 
-func NewAnonymousIPReader(buffer []byte) (*AnonymousIPReader, error) {
+func NewAnonymousIPReaderType(buffer []byte, expectedTypes ...string) (*AnonymousIPReader, error) {
 	reader, err := newReader(buffer)
 	if err != nil {
 		return nil, err
 	}
-	if reader.metadata.DatabaseType != "GeoIP2-Anonymous-IP" {
-		return nil, errors.New("wrong MaxMind DB Anonymous-IP type: " + reader.metadata.DatabaseType)
+	if !isExpectedDatabaseType(reader.metadata.DatabaseType, expectedTypes...) {
+		return nil, errors.New("wrong database Anonymous-IP type: " + reader.metadata.DatabaseType)
 	}
 	return &AnonymousIPReader{
 		reader: reader,
 	}, nil
+}
+
+func NewAnonymousIPReader(buffer []byte) (*AnonymousIPReader, error) {
+	return NewAnonymousIPReaderType(buffer, "GeoIP2-Anonymous-IP")
 }
 
 func NewAnonymousIPReaderFromFile(filename string) (*AnonymousIPReader, error) {
