@@ -49,17 +49,21 @@ func (r *ConnectionTypeReader) Lookup(ip net.IP) (string, error) {
 	return result.ConnectionType, nil
 }
 
-func NewConnectionTypeReader(buffer []byte) (*ConnectionTypeReader, error) {
+func NewConnectionTypeReaderType(buffer []byte, expectedTypes ...string) (*ConnectionTypeReader, error) {
 	reader, err := newReader(buffer)
 	if err != nil {
 		return nil, err
 	}
-	if reader.metadata.DatabaseType != "GeoIP2-Connection-Type" {
-		return nil, errors.New("wrong MaxMind DB Connection-Type type: " + reader.metadata.DatabaseType)
+	if !isExpectedDatabaseType(reader.metadata.DatabaseType, expectedTypes...) {
+		return nil, errors.New("wrong database Connection-Type type: " + reader.metadata.DatabaseType)
 	}
 	return &ConnectionTypeReader{
 		reader: reader,
 	}, nil
+}
+
+func NewConnectionTypeReader(buffer []byte) (*ConnectionTypeReader, error) {
+	return NewConnectionTypeReaderType(buffer, "GeoIP2-Connection-Type")
 }
 
 func NewConnectionTypeReaderFromFile(filename string) (*ConnectionTypeReader, error) {

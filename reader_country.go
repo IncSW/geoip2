@@ -63,18 +63,21 @@ func (r *CountryReader) Lookup(ip net.IP) (*CountryResult, error) {
 	return result, nil
 }
 
-func NewCountryReader(buffer []byte) (*CountryReader, error) {
+func NewCountryReaderType(buffer []byte, expectedTypes ...string) (*CountryReader, error) {
 	reader, err := newReader(buffer)
 	if err != nil {
 		return nil, err
 	}
-	if reader.metadata.DatabaseType != "GeoIP2-Country" &&
-		reader.metadata.DatabaseType != "GeoLite2-Country" {
-		return nil, errors.New("wrong MaxMind DB Country type: " + reader.metadata.DatabaseType)
+	if !isExpectedDatabaseType(reader.metadata.DatabaseType, expectedTypes...) {
+		return nil, errors.New("wrong database Country type: " + reader.metadata.DatabaseType)
 	}
 	return &CountryReader{
 		reader: reader,
 	}, nil
+}
+
+func NewCountryReader(buffer []byte) (*CountryReader, error) {
+	return NewCountryReaderType(buffer, "GeoIP2-Country", "GeoLite2-Country", "Geoacumen-Country")
 }
 
 func NewCountryReaderFromFile(filename string) (*CountryReader, error) {

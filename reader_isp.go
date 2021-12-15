@@ -49,17 +49,21 @@ func (r *ISPReader) Lookup(ip net.IP) (*ISP, error) {
 	return result, nil
 }
 
-func NewISPReader(buffer []byte) (*ISPReader, error) {
+func NewISPReaderType(buffer []byte, expectedTypes ...string) (*ISPReader, error) {
 	reader, err := newReader(buffer)
 	if err != nil {
 		return nil, err
 	}
-	if reader.metadata.DatabaseType != "GeoIP2-ISP" {
-		return nil, errors.New("wrong MaxMind DB ISP type: " + reader.metadata.DatabaseType)
+	if !isExpectedDatabaseType(reader.metadata.DatabaseType, expectedTypes...) {
+		return nil, errors.New("wrong database ISP type: " + reader.metadata.DatabaseType)
 	}
 	return &ISPReader{
 		reader: reader,
 	}, nil
+}
+
+func NewISPReader(buffer []byte) (*ISPReader, error) {
+	return NewISPReaderType(buffer, "GeoIP2-ISP")
 }
 
 func NewISPReaderFromFile(filename string) (*ISPReader, error) {
