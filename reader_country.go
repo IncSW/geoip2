@@ -69,7 +69,9 @@ func NewCountryReader(buffer []byte) (*CountryReader, error) {
 		return nil, err
 	}
 	if reader.metadata.DatabaseType != "GeoIP2-Country" &&
-		reader.metadata.DatabaseType != "GeoLite2-Country" {
+		reader.metadata.DatabaseType != "GeoLite2-Country" &&
+		reader.metadata.DatabaseType != "DBIP-Country" &&
+		reader.metadata.DatabaseType != "DBIP-Country-Lite" {
 		return nil, errors.New("wrong MaxMind DB Country type: " + reader.metadata.DatabaseType)
 	}
 	return &CountryReader{

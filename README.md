@@ -58,6 +58,37 @@ connection_type-24              3883234     305 ns/op     32 B/op     2 allocs/o
 connection_type_parallel-24    34284831    32.1 ns/op     32 B/op     2 allocs/op
 ```
 
+## Supported databases types
+
+### Country
+- GeoIP2-Country
+- GeoLite2-Country
+- DBIP-Country
+- DBIP-Country-Lite
+
+### City
+- GeoIP2-City
+- GeoLite2-City
+- GeoIP2-Enterprise
+- DBIP-City-Lite
+
+### ISP
+- GeoIP2-ISP
+
+### ASN
+- GeoLite2-ASN
+- DBIP-ASN-Lite
+- DBIP-ASN-Lite (compat=GeoLite2-ASN)
+
+### Connection Type
+- GeoIP2-Connection-Type
+
+### Anonymous IP
+- GeoIP2-Anonymous-IP
+
+### Domain
+- GeoIP2-Domain
+
 ## License
 
 [MIT License](LICENSE).
