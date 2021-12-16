@@ -90,7 +90,8 @@ func NewCityReader(buffer []byte) (*CityReader, error) {
 	}
 	if reader.metadata.DatabaseType != "GeoIP2-City" &&
 		reader.metadata.DatabaseType != "GeoLite2-City" &&
-		reader.metadata.DatabaseType != "GeoIP2-Enterprise" {
+		reader.metadata.DatabaseType != "GeoIP2-Enterprise" &&
+		reader.metadata.DatabaseType != "DBIP-City-Lite" {
 		return nil, errors.New("wrong MaxMind DB City type: " + reader.metadata.DatabaseType)
 	}
 	return &CityReader{
