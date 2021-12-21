@@ -66,7 +66,7 @@ func NewASNReaderWithType(buffer []byte, expectedTypes ...string) (*ASNReader, e
 }
 
 func NewASNReader(buffer []byte) (*ASNReader, error) {
-	return NewASNReaderWithType(buffer, "GeoLite2-ASN")
+	return NewASNReaderWithType(buffer, "GeoLite2-ASN", "DBIP-ASN-Lite", "DBIP-ASN-Lite (compat=GeoLite2-ASN)")
 }
 
 func NewASNReaderFromFile(filename string) (*ASNReader, error) {

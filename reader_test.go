@@ -1,4 +1,6 @@
-// Test DB https://github.com/maxmind/MaxMind-DB
+// Test DB
+// https://github.com/maxmind/MaxMind-DB
+// https://db-ip.com/db/lite.php
 package geoip2
 
 import (
@@ -403,6 +405,86 @@ func TestASN(t *testing.T) {
 		t.Fatal()
 	}
 	if record.AutonomousSystemOrganization != "Merit Network Inc." {
+		t.Fatal()
+	}
+}
+
+func TestDBIPCity(t *testing.T) {
+	reader, err := NewCityReaderFromFile("testdata/dbip-city-lite.mmdb")
+	if err != nil {
+		t.Fatal(err)
+	}
+	record, err := reader.Lookup(net.ParseIP("66.30.184.198"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if record.City.GeoNameID != 0 {
+		t.Fatal()
+	}
+	if record.City.Names["en"] != "Boston" {
+		t.Fatal()
+	}
+	if record.Location.Latitude != 42.3601 {
+		t.Fatal()
+	}
+	if record.Location.Longitude != -71.0589 {
+		t.Fatal()
+	}
+	if len(record.Subdivisions) != 1 {
+		t.Fatal()
+	}
+	if record.Subdivisions[0].Names["en"] != "Massachusetts" {
+		t.Fatal()
+	}
+}
+
+func TestDBIPCountry(t *testing.T) {
+	reader, err := NewCountryReaderFromFile("testdata/dbip-country-lite.mmdb")
+	if err != nil {
+		t.Fatal(err)
+	}
+	record, err := reader.Lookup(net.ParseIP("66.30.184.198"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if record.Continent.GeoNameID != 6255149 {
+		t.Fatal()
+	}
+	if record.Continent.Code != "NA" {
+		t.Fatal()
+	}
+	if record.Continent.Names["en"] != "North America" ||
+		record.Continent.Names["ru"] != "Северная Америка" {
+		t.Fatal()
+	}
+	if record.Country.GeoNameID != 6252001 {
+		t.Fatal()
+	}
+	if record.Country.ISOCode != "US" {
+		t.Fatal()
+	}
+	if record.Country.Names["fr"] != "États-Unis" ||
+		record.Country.Names["pt-BR"] != "Estados Unidos" {
+		t.Fatal()
+	}
+	if record.Country.IsInEuropeanUnion {
+		t.Fatal()
+	}
+}
+
+func TestDBIPASN(t *testing.T) {
+	reader, err := NewASNReaderFromFile("testdata/dbip-asn-lite.mmdb")
+	if err != nil {
+		t.Fatal(err)
+	}
+	record, err := reader.Lookup(net.ParseIP("66.30.184.198"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if record.AutonomousSystemNumber != 7922 {
+		t.Fatal()
+	}
+	if record.AutonomousSystemOrganization != "Comcast Cable Communications, LLC" {
 		t.Fatal()
 	}
 }

@@ -80,7 +80,7 @@ func NewCountryReaderWithType(buffer []byte, expectedTypes ...string) (*CountryR
 }
 
 func NewCountryReader(buffer []byte) (*CountryReader, error) {
-	return NewCountryReaderWithType(buffer, "GeoIP2-Country", "GeoLite2-Country", "Geoacumen-Country")
+	return NewCountryReaderWithType(buffer, "GeoIP2-Country", "GeoLite2-Country", "Geoacumen-Country", "DBIP-Country", "DBIP-Country-Lite")
 }
 
 func NewCountryReaderFromFile(filename string) (*CountryReader, error) {

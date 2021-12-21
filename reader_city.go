@@ -100,7 +100,7 @@ func NewCityReaderWithType(buffer []byte, expectedTypes ...string) (*CityReader,
 }
 
 func NewCityReader(buffer []byte) (*CityReader, error) {
-	return NewCityReaderWithType(buffer, "GeoIP2-City", "GeoLite2-City", "GeoIP2-Enterprise")
+	return NewCityReaderWithType(buffer, "GeoIP2-City", "GeoLite2-City", "GeoIP2-Enterprise", "DBIP-City-Lite")
 }
 
 func NewCityReaderFromFile(filename string) (*CityReader, error) {
