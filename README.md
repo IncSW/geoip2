@@ -65,6 +65,7 @@ connection_type_parallel-24    34284831    32.1 ns/op     32 B/op     2 allocs/o
 - GeoLite2-Country
 - DBIP-Country
 - DBIP-Country-Lite
+- Geoacumen-Country
 
 ### City
 - GeoIP2-City
