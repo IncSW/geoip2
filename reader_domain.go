@@ -49,7 +49,7 @@ func (r *DomainReader) Lookup(ip net.IP) (string, error) {
 	return result.Domain, nil
 }
 
-func NewDomainReaderType(buffer []byte, expectedTypes ...string) (*DomainReader, error) {
+func NewDomainReaderWithType(buffer []byte, expectedTypes ...string) (*DomainReader, error) {
 	reader, err := newReader(buffer)
 	if err != nil {
 		return nil, err
@@ -63,7 +63,7 @@ func NewDomainReaderType(buffer []byte, expectedTypes ...string) (*DomainReader,
 }
 
 func NewDomainReader(buffer []byte) (*DomainReader, error) {
-	return NewDomainReaderType(buffer, "GeoIP2-Domain")
+	return NewDomainReaderWithType(buffer, "GeoIP2-Domain")
 }
 
 func NewDomainReaderFromFile(filename string) (*DomainReader, error) {

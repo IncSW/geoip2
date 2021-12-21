@@ -49,7 +49,7 @@ func (r *ISPReader) Lookup(ip net.IP) (*ISP, error) {
 	return result, nil
 }
 
-func NewISPReaderType(buffer []byte, expectedTypes ...string) (*ISPReader, error) {
+func NewISPReaderWithType(buffer []byte, expectedTypes ...string) (*ISPReader, error) {
 	reader, err := newReader(buffer)
 	if err != nil {
 		return nil, err
@@ -63,7 +63,7 @@ func NewISPReaderType(buffer []byte, expectedTypes ...string) (*ISPReader, error
 }
 
 func NewISPReader(buffer []byte) (*ISPReader, error) {
-	return NewISPReaderType(buffer, "GeoIP2-ISP")
+	return NewISPReaderWithType(buffer, "GeoIP2-ISP")
 }
 
 func NewISPReaderFromFile(filename string) (*ISPReader, error) {

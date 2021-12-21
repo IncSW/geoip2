@@ -49,7 +49,7 @@ func (r *ConnectionTypeReader) Lookup(ip net.IP) (string, error) {
 	return result.ConnectionType, nil
 }
 
-func NewConnectionTypeReaderType(buffer []byte, expectedTypes ...string) (*ConnectionTypeReader, error) {
+func NewConnectionTypeReaderWithType(buffer []byte, expectedTypes ...string) (*ConnectionTypeReader, error) {
 	reader, err := newReader(buffer)
 	if err != nil {
 		return nil, err
@@ -63,7 +63,7 @@ func NewConnectionTypeReaderType(buffer []byte, expectedTypes ...string) (*Conne
 }
 
 func NewConnectionTypeReader(buffer []byte) (*ConnectionTypeReader, error) {
-	return NewConnectionTypeReaderType(buffer, "GeoIP2-Connection-Type")
+	return NewConnectionTypeReaderWithType(buffer, "GeoIP2-Connection-Type")
 }
 
 func NewConnectionTypeReaderFromFile(filename string) (*ConnectionTypeReader, error) {

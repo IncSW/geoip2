@@ -49,7 +49,7 @@ func (r *AnonymousIPReader) Lookup(ip net.IP) (*AnonymousIP, error) {
 	return result, nil
 }
 
-func NewAnonymousIPReaderType(buffer []byte, expectedTypes ...string) (*AnonymousIPReader, error) {
+func NewAnonymousIPReaderWithType(buffer []byte, expectedTypes ...string) (*AnonymousIPReader, error) {
 	reader, err := newReader(buffer)
 	if err != nil {
 		return nil, err
@@ -63,7 +63,7 @@ func NewAnonymousIPReaderType(buffer []byte, expectedTypes ...string) (*Anonymou
 }
 
 func NewAnonymousIPReader(buffer []byte) (*AnonymousIPReader, error) {
-	return NewAnonymousIPReaderType(buffer, "GeoIP2-Anonymous-IP")
+	return NewAnonymousIPReaderWithType(buffer, "GeoIP2-Anonymous-IP")
 }
 
 func NewAnonymousIPReaderFromFile(filename string) (*AnonymousIPReader, error) {

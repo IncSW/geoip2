@@ -63,7 +63,7 @@ func (r *CountryReader) Lookup(ip net.IP) (*CountryResult, error) {
 	return result, nil
 }
 
-func NewCountryReaderType(buffer []byte, expectedTypes ...string) (*CountryReader, error) {
+func NewCountryReaderWithType(buffer []byte, expectedTypes ...string) (*CountryReader, error) {
 	reader, err := newReader(buffer)
 	if err != nil {
 		return nil, err
@@ -77,7 +77,7 @@ func NewCountryReaderType(buffer []byte, expectedTypes ...string) (*CountryReade
 }
 
 func NewCountryReader(buffer []byte) (*CountryReader, error) {
-	return NewCountryReaderType(buffer, "GeoIP2-Country", "GeoLite2-Country", "Geoacumen-Country")
+	return NewCountryReaderWithType(buffer, "GeoIP2-Country", "GeoLite2-Country", "Geoacumen-Country")
 }
 
 func NewCountryReaderFromFile(filename string) (*CountryReader, error) {

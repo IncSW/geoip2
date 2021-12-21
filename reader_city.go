@@ -83,7 +83,7 @@ func (r *CityReader) Lookup(ip net.IP) (*CityResult, error) {
 	return result, nil
 }
 
-func NewCityReaderType(buffer []byte, expectedTypes ...string) (*CityReader, error) {
+func NewCityReaderWithType(buffer []byte, expectedTypes ...string) (*CityReader, error) {
 	reader, err := newReader(buffer)
 	if err != nil {
 		return nil, err
@@ -97,7 +97,7 @@ func NewCityReaderType(buffer []byte, expectedTypes ...string) (*CityReader, err
 }
 
 func NewCityReader(buffer []byte) (*CityReader, error) {
-	return NewCityReaderType(buffer, "GeoIP2-City", "GeoLite2-City", "GeoIP2-Enterprise")
+	return NewCityReaderWithType(buffer, "GeoIP2-City", "GeoLite2-City", "GeoIP2-Enterprise")
 }
 
 func NewCityReaderFromFile(filename string) (*CityReader, error) {

@@ -49,7 +49,7 @@ func (r *ASNReader) Lookup(ip net.IP) (*ASN, error) {
 	return result, nil
 }
 
-func NewASNReaderType(buffer []byte, expectedTypes ...string) (*ASNReader, error) {
+func NewASNReaderWithType(buffer []byte, expectedTypes ...string) (*ASNReader, error) {
 	reader, err := newReader(buffer)
 	if err != nil {
 		return nil, err
@@ -63,7 +63,7 @@ func NewASNReaderType(buffer []byte, expectedTypes ...string) (*ASNReader, error
 }
 
 func NewASNReader(buffer []byte) (*ASNReader, error) {
-	return NewASNReaderType(buffer, "GeoLite2-ASN")
+	return NewASNReaderWithType(buffer, "GeoLite2-ASN")
 }
 
 func NewASNReaderFromFile(filename string) (*ASNReader, error) {
