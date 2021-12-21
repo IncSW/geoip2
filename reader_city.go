@@ -83,6 +83,9 @@ func (r *CityReader) Lookup(ip net.IP) (*CityResult, error) {
 	return result, nil
 }
 
+// NewCityReaderWithType creates a new CityReader that accepts MMDB files with a custom database type. Note that
+// CityReader only implements the fields provided by MaxMind Geo*-City and GeoIP2-Enterprise databases, and will ignore
+// other fields. It is up to the developer to ensure that the database provides a compatible selection of fields.
 func NewCityReaderWithType(buffer []byte, expectedTypes ...string) (*CityReader, error) {
 	reader, err := newReader(buffer)
 	if err != nil {

@@ -63,6 +63,9 @@ func (r *CountryReader) Lookup(ip net.IP) (*CountryResult, error) {
 	return result, nil
 }
 
+// NewCountryReaderWithType creates a new CountryReader that accepts MMDB files with a custom database type. Note that
+// CountryReader only implements the fields provided by MaxMind Geo*-Country databases, and will ignore other fields.
+// It is up to the developer to ensure that the database provides a compatible selection of fields.
 func NewCountryReaderWithType(buffer []byte, expectedTypes ...string) (*CountryReader, error) {
 	reader, err := newReader(buffer)
 	if err != nil {

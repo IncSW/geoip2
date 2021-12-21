@@ -49,6 +49,9 @@ func (r *ASNReader) Lookup(ip net.IP) (*ASN, error) {
 	return result, nil
 }
 
+// NewASNReaderWithType creates a new ASNReader that accepts MMDB files with a custom database type. Note that
+// ASNReader only implements the fields provided by MaxMind GeoLite2-ASN databases, and will ignore other fields.
+// It is up to the developer to ensure that the database provides a compatible selection of fields.
 func NewASNReaderWithType(buffer []byte, expectedTypes ...string) (*ASNReader, error) {
 	reader, err := newReader(buffer)
 	if err != nil {

@@ -49,6 +49,9 @@ func (r *AnonymousIPReader) Lookup(ip net.IP) (*AnonymousIP, error) {
 	return result, nil
 }
 
+// NewAnonymousIPReaderWithType creates a new AnonymousIPReader that accepts MMDB files with a custom database type.
+// Note that AnonymousIPReader only implements the fields provided by MaxMind GeoIP2-Anonymous-IP databases, and will
+// ignore other fields. It is up to the developer to ensure that the database provides a compatible selection of fields.
 func NewAnonymousIPReaderWithType(buffer []byte, expectedTypes ...string) (*AnonymousIPReader, error) {
 	reader, err := newReader(buffer)
 	if err != nil {

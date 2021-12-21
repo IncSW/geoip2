@@ -49,6 +49,10 @@ func (r *ConnectionTypeReader) Lookup(ip net.IP) (string, error) {
 	return result.ConnectionType, nil
 }
 
+// NewConnectionTypeReaderWithType creates a new ConnectionTypeReader that accepts MMDB files with a custom database
+// type. Note that ConnectionTypeReader only implements the fields provided by MaxMind GeoIP2-Connection-Type databases,
+// and will ignore other fields. It is up to the developer to ensure that the database provides a compatible selection
+// of fields.
 func NewConnectionTypeReaderWithType(buffer []byte, expectedTypes ...string) (*ConnectionTypeReader, error) {
 	reader, err := newReader(buffer)
 	if err != nil {

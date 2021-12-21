@@ -49,6 +49,9 @@ func (r *DomainReader) Lookup(ip net.IP) (string, error) {
 	return result.Domain, nil
 }
 
+// NewDomainReaderWithType creates a new DomainReader that accepts MMDB files with a custom database type. Note that
+// DomainReader only implements the fields provided by MaxMind GeoIP2-Domain databases, and will ignore other fields.
+// It is up to the developer to ensure that the database provides a compatible selection of fields.
 func NewDomainReaderWithType(buffer []byte, expectedTypes ...string) (*DomainReader, error) {
 	reader, err := newReader(buffer)
 	if err != nil {

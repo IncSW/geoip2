@@ -49,6 +49,9 @@ func (r *ISPReader) Lookup(ip net.IP) (*ISP, error) {
 	return result, nil
 }
 
+// NewISPReaderWithType creates a new ISPReader that accepts MMDB files with a custom database type. Note that
+// ISPReader only implements the fields provided by MaxMind GeoIP2-ISP databases, and will ignore other fields.
+// It is up to the developer to ensure that the database provides a compatible selection of fields.
 func NewISPReaderWithType(buffer []byte, expectedTypes ...string) (*ISPReader, error) {
 	reader, err := newReader(buffer)
 	if err != nil {
