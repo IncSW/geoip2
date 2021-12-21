@@ -55,7 +55,7 @@ func NewAnonymousIPReaderType(buffer []byte, expectedTypes ...string) (*Anonymou
 		return nil, err
 	}
 	if !isExpectedDatabaseType(reader.metadata.DatabaseType, expectedTypes...) {
-		return nil, errors.New("wrong database Anonymous-IP type: " + reader.metadata.DatabaseType)
+		return nil, errors.New("wrong MaxMind DB Anonymous-IP type: " + reader.metadata.DatabaseType)
 	}
 	return &AnonymousIPReader{
 		reader: reader,

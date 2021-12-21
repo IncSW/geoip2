@@ -55,7 +55,7 @@ func NewDomainReaderType(buffer []byte, expectedTypes ...string) (*DomainReader,
 		return nil, err
 	}
 	if !isExpectedDatabaseType(reader.metadata.DatabaseType, expectedTypes...) {
-		return nil, errors.New("wrong database Domain type: " + reader.metadata.DatabaseType)
+		return nil, errors.New("wrong MaxMind DB Domain type: " + reader.metadata.DatabaseType)
 	}
 	return &DomainReader{
 		reader: reader,

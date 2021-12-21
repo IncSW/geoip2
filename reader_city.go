@@ -89,7 +89,7 @@ func NewCityReaderType(buffer []byte, expectedTypes ...string) (*CityReader, err
 		return nil, err
 	}
 	if !isExpectedDatabaseType(reader.metadata.DatabaseType, expectedTypes...) {
-		return nil, errors.New("wrong database City type: " + reader.metadata.DatabaseType)
+		return nil, errors.New("wrong MaxMind DB City type: " + reader.metadata.DatabaseType)
 	}
 	return &CityReader{
 		reader: reader,

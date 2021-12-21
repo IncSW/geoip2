@@ -69,7 +69,7 @@ func NewCountryReaderType(buffer []byte, expectedTypes ...string) (*CountryReade
 		return nil, err
 	}
 	if !isExpectedDatabaseType(reader.metadata.DatabaseType, expectedTypes...) {
-		return nil, errors.New("wrong database Country type: " + reader.metadata.DatabaseType)
+		return nil, errors.New("wrong MaxMind DB Country type: " + reader.metadata.DatabaseType)
 	}
 	return &CountryReader{
 		reader: reader,

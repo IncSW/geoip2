@@ -55,7 +55,7 @@ func NewISPReaderType(buffer []byte, expectedTypes ...string) (*ISPReader, error
 		return nil, err
 	}
 	if !isExpectedDatabaseType(reader.metadata.DatabaseType, expectedTypes...) {
-		return nil, errors.New("wrong database ISP type: " + reader.metadata.DatabaseType)
+		return nil, errors.New("wrong MaxMind DB ISP type: " + reader.metadata.DatabaseType)
 	}
 	return &ISPReader{
 		reader: reader,

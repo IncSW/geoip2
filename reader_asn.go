@@ -55,7 +55,7 @@ func NewASNReaderType(buffer []byte, expectedTypes ...string) (*ASNReader, error
 		return nil, err
 	}
 	if !isExpectedDatabaseType(reader.metadata.DatabaseType, expectedTypes...) {
-		return nil, errors.New("wrong database ASN type: " + reader.metadata.DatabaseType)
+		return nil, errors.New("wrong MaxMind DB ASN type: " + reader.metadata.DatabaseType)
 	}
 	return &ASNReader{
 		reader: reader,
