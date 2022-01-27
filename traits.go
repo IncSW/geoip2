@@ -99,6 +99,16 @@ func readTraitsMap(traits *Traits, buffer []byte, mapSize uint, offset uint) (ui
 			if err != nil {
 				return 0, err
 			}
+		case "mobile_country_code":
+			traits.MobileCountryCode, offset, err = readString(buffer, offset)
+			if err != nil {
+				return 0, err
+			}
+		case "mobile_network_code":
+			traits.MobileNetworkCode, offset, err = readString(buffer, offset)
+			if err != nil {
+				return 0, err
+			}
 		default:
 			return 0, errors.New("unknown traits key: " + string(key))
 		}

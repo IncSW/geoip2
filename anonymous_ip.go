@@ -42,7 +42,7 @@ func readAnonymousIPMap(result *AnonymousIP, buffer []byte, mapSize uint, offset
 				return 0, err
 			}
 		default:
-			return 0, errors.New("unknown isp key: " + string(key))
+			return 0, errors.New("unknown anonymous ip key: " + string(key))
 		}
 	}
 	return offset, nil

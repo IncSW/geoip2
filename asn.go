@@ -22,7 +22,7 @@ func readASNMap(result *ASN, buffer []byte, mapSize uint, offset uint) (uint, er
 				return 0, err
 			}
 		default:
-			return 0, errors.New("unknown isp key: " + string(key))
+			return 0, errors.New("unknown asn key: " + string(key))
 		}
 	}
 	return offset, nil
