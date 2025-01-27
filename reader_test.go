@@ -9,7 +9,7 @@ import (
 )
 
 func TestAnonymousIP(t *testing.T) {
-	reader, err := NewAnonymousIPReaderFromFile("testdata/GeoIP2-Anonymous-IP-Test.mmdb")
+	reader, err := NewAnonymousIPReaderFromFile("testdata/maxmind/test-data/GeoIP2-Anonymous-IP-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -63,7 +63,7 @@ func TestReaderZeroLength(t *testing.T) {
 }
 
 func TestCity(t *testing.T) {
-	reader, err := NewCityReaderFromFile("testdata/GeoIP2-City-Test.mmdb")
+	reader, err := NewCityReaderFromFile("testdata/maxmind/test-data/GeoIP2-City-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -133,7 +133,7 @@ func TestCity(t *testing.T) {
 }
 
 func TestConnectionType(t *testing.T) {
-	reader, err := NewConnectionTypeReaderFromFile("testdata/GeoIP2-Connection-Type-Test.mmdb")
+	reader, err := NewConnectionTypeReaderFromFile("testdata/maxmind/test-data/GeoIP2-Connection-Type-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -142,7 +142,7 @@ func TestConnectionType(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if record != "Dialup" {
+	if record != "Cable/DSL" {
 		t.Fatal()
 	}
 
@@ -150,13 +150,13 @@ func TestConnectionType(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if record != "Cable/DSL" {
+	if record != "Cellular" {
 		t.Fatal()
 	}
 }
 
 func TestCountry(t *testing.T) {
-	reader, err := NewCountryReaderFromFile("testdata/GeoIP2-Country-Test.mmdb")
+	reader, err := NewCountryReaderFromFile("testdata/maxmind/test-data/GeoIP2-Country-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -240,7 +240,7 @@ func TestCountry(t *testing.T) {
 }
 
 func TestDomain(t *testing.T) {
-	reader, err := NewDomainReaderFromFile("testdata/GeoIP2-Domain-Test.mmdb")
+	reader, err := NewDomainReaderFromFile("testdata/maxmind/test-data/GeoIP2-Domain-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -263,7 +263,7 @@ func TestDomain(t *testing.T) {
 }
 
 func TestEnterprise(t *testing.T) {
-	reader, err := NewEnterpriseReaderFromFile("testdata/GeoIP2-Enterprise-Test.mmdb")
+	reader, err := NewEnterpriseReaderFromFile("testdata/maxmind/test-data/GeoIP2-Enterprise-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -340,7 +340,7 @@ func TestEnterprise(t *testing.T) {
 }
 
 func TestISP(t *testing.T) {
-	reader, err := NewISPReaderFromFile("testdata/GeoIP2-ISP-Test.mmdb")
+	reader, err := NewISPReaderFromFile("testdata/maxmind/test-data/GeoIP2-ISP-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -381,7 +381,7 @@ func TestISP(t *testing.T) {
 }
 
 func TestASN(t *testing.T) {
-	reader, err := NewASNReaderFromFile("testdata/GeoLite2-ASN-Test.mmdb")
+	reader, err := NewASNReaderFromFile("testdata/maxmind/test-data/GeoLite2-ASN-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -410,7 +410,7 @@ func TestASN(t *testing.T) {
 }
 
 func TestDBIPCity(t *testing.T) {
-	reader, err := NewCityReaderFromFile("testdata/dbip-city-lite.mmdb")
+	reader, err := NewCityReaderFromFile("testdata/dbip/dbip-city-lite.mmdb")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -421,13 +421,13 @@ func TestDBIPCity(t *testing.T) {
 	if record.City.GeoNameID != 0 {
 		t.Fatal()
 	}
-	if record.City.Names["en"] != "Boston" {
+	if record.City.Names["en"] != "Medfield" {
 		t.Fatal()
 	}
-	if record.Location.Latitude != 42.3601 {
+	if record.Location.Latitude != 42.1876 {
 		t.Fatal()
 	}
-	if record.Location.Longitude != -71.0589 {
+	if record.Location.Longitude != -71.3065 {
 		t.Fatal()
 	}
 	if len(record.Subdivisions) != 1 {
@@ -439,7 +439,7 @@ func TestDBIPCity(t *testing.T) {
 }
 
 func TestDBIPCountry(t *testing.T) {
-	reader, err := NewCountryReaderFromFile("testdata/dbip-country-lite.mmdb")
+	reader, err := NewCountryReaderFromFile("testdata/dbip/dbip-country-lite.mmdb")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -473,7 +473,7 @@ func TestDBIPCountry(t *testing.T) {
 }
 
 func TestDBIPASN(t *testing.T) {
-	reader, err := NewASNReaderFromFile("testdata/dbip-asn-lite.mmdb")
+	reader, err := NewASNReaderFromFile("testdata/dbip/dbip-asn-lite.mmdb")
 	if err != nil {
 		t.Fatal(err)
 	}

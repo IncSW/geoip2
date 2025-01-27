@@ -6,9 +6,9 @@ import (
 )
 
 func TestReader(t *testing.T) {
-	ip := net.ParseIP("81.2.69.142")
+	ip := net.ParseIP("81.2.69.160")
 
-	countryReader, err := NewCountryReaderFromFile("testdata/GeoIP2-Country.mmdb")
+	countryReader, err := NewCountryReaderFromFile("testdata/maxmind/test-data/GeoIP2-Country-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -16,7 +16,7 @@ func TestReader(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	countryLiteReader, err := NewCountryReaderFromFile("testdata/GeoLite2-Country.mmdb")
+	countryLiteReader, err := NewCountryReaderFromFile("testdata/maxmind/test-data/GeoLite2-Country-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -25,7 +25,7 @@ func TestReader(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	cityReader, err := NewCityReaderFromFile("testdata/GeoIP2-City.mmdb")
+	cityReader, err := NewCityReaderFromFile("testdata/maxmind/test-data/GeoIP2-City-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func TestReader(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	cityLiteReader, err := NewCityReaderFromFile("testdata/GeoLite2-City.mmdb")
+	cityLiteReader, err := NewCityReaderFromFile("testdata/maxmind/test-data/GeoLite2-City-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -42,7 +42,7 @@ func TestReader(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	ispReader, err := NewISPReaderFromFile("testdata/GeoIP2-ISP.mmdb")
+	ispReader, err := NewISPReaderFromFile("testdata/maxmind/test-data/GeoIP2-ISP-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -51,7 +51,8 @@ func TestReader(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	connectionTypeReader, err := NewConnectionTypeReaderFromFile("testdata/GeoIP2-Connection-Type.mmdb")
+	ip = net.ParseIP("2.125.160.216")
+	connectionTypeReader, err := NewConnectionTypeReaderFromFile("testdata/maxmind/test-data/GeoIP2-Connection-Type-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -60,7 +61,8 @@ func TestReader(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	asnReader, err := NewASNReaderFromFile("testdata/GeoLite2-ASN.mmdb")
+	ip = net.ParseIP("81.128.69.160")
+	asnReader, err := NewASNReaderFromFile("testdata/maxmind/test-data/GeoLite2-ASN-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -75,7 +77,7 @@ func BenchmarkGeoIP2(b *testing.B) {
 	b.ReportAllocs()
 
 	b.Run("country", func(b *testing.B) {
-		reader, err := NewCountryReaderFromFile("testdata/GeoIP2-Country.mmdb")
+		reader, err := NewCountryReaderFromFile("testdata/maxmind/test-data/GeoIP2-Country-Test.mmdb")
 		if err != nil {
 			b.Fatal(err)
 		}
@@ -94,7 +96,7 @@ func BenchmarkGeoIP2(b *testing.B) {
 	})
 
 	b.Run("city", func(b *testing.B) {
-		reader, err := NewCityReaderFromFile("testdata/GeoIP2-City.mmdb")
+		reader, err := NewCityReaderFromFile("testdata/maxmind/test-data/GeoIP2-City-Test.mmdb")
 		if err != nil {
 			b.Fatal(err)
 		}
@@ -113,7 +115,7 @@ func BenchmarkGeoIP2(b *testing.B) {
 	})
 
 	b.Run("isp", func(b *testing.B) {
-		reader, err := NewISPReaderFromFile("testdata/GeoIP2-ISP.mmdb")
+		reader, err := NewISPReaderFromFile("testdata/maxmind/test-data/GeoIP2-ISP-Test.mmdb")
 		if err != nil {
 			b.Fatal(err)
 		}
@@ -132,7 +134,7 @@ func BenchmarkGeoIP2(b *testing.B) {
 	})
 
 	b.Run("connection_type", func(b *testing.B) {
-		reader, err := NewConnectionTypeReaderFromFile("testdata/GeoIP2-Connection-Type.mmdb")
+		reader, err := NewConnectionTypeReaderFromFile("testdata/maxmind/test-data/GeoIP2-Connection-Type-Test.mmdb")
 		if err != nil {
 			b.Fatal(err)
 		}
@@ -151,7 +153,7 @@ func BenchmarkGeoIP2(b *testing.B) {
 	})
 
 	b.Run("asn", func(b *testing.B) {
-		reader, err := NewASNReaderFromFile("testdata/GeoLite2-ASN.mmdb")
+		reader, err := NewASNReaderFromFile("testdata/maxmind/test-data/GeoLite2-ASN-Test.mmdb")
 		if err != nil {
 			b.Fatal(err)
 		}

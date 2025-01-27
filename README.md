@@ -89,6 +89,23 @@ connection_type_parallel-24    34284831    32.1 ns/op     32 B/op     2 allocs/o
 ### Domain
 - GeoIP2-Domain
 
+## MMDB files for tests
+
+MMDB files for tests are organised in their respective directories based on the source within the `testdata` repository root directory.
+
+### MaxMind
+
+These are obtained using a submodule into a `testdata/maxmind` directory.
+
+```
+git submodule init
+git submodule update
+```
+
+### DB-IP
+
+You must obtain these files manually and place them into the `testdata/dbip` directory.
+
 ## License
 
 [MIT License](LICENSE).
