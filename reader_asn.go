@@ -2,6 +2,7 @@ package geoip2
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net"
 	"strconv"
@@ -12,7 +13,7 @@ type ASNReader struct {
 }
 
 func (r *ASNReader) Lookup(ip net.IP) (*ASN, error) {
-	offset, err := r.getOffset(ip)
+	offset, prefix, err := r.getOffsetWithPrefix(ip)
 	if err != nil {
 		return nil, err
 	}
@@ -21,6 +22,8 @@ func (r *ASNReader) Lookup(ip net.IP) (*ASN, error) {
 		return nil, err
 	}
 	result := &ASN{}
+	_, network, err := net.ParseCIDR(fmt.Sprintf("%s/%s", ip.String(), strconv.Itoa(int(prefix))))
+	result.Network = network.String()
 	switch dataType {
 	case dataTypeMap:
 		_, err = readASNMap(result, r.decoderBuffer, size, offset)

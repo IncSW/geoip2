@@ -123,6 +123,7 @@ type AnonymousIP struct {
 type ASN struct {
 	AutonomousSystemNumber       uint32
 	AutonomousSystemOrganization string
+	Network                      string
 }
 
 type Domain struct {
