@@ -4,9 +4,28 @@ import (
 	"encoding/binary"
 	"errors"
 	"math"
+	"net"
 	"strconv"
 	"unsafe"
 )
+
+func getNetworkString(ip net.IP, mask uint) string {
+	bitLen := 128
+	for i := 0; i < len(ip); i++ {
+		if ip[i] != 0 {
+			if i == 10 {
+				bitLen = 32
+			}
+			break
+		}
+	}
+	cidrMask := net.CIDRMask(int(mask), bitLen)
+	ipNet := net.IPNet{
+		IP:   ip.Mask(cidrMask),
+		Mask: cidrMask,
+	}
+	return ipNet.String()
+}
 
 func readControl(buffer []byte, offset uint) (byte, uint, uint, error) {
 	controlByte := buffer[offset]

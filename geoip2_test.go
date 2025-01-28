@@ -2,6 +2,7 @@ package geoip2
 
 import (
 	"net"
+	"runtime"
 	"testing"
 )
 
@@ -73,7 +74,7 @@ func TestReader(t *testing.T) {
 }
 
 func BenchmarkGeoIP2(b *testing.B) {
-	ip := net.ParseIP("81.2.69.142")
+	ip := net.ParseIP("1.128.0.0")
 	b.ReportAllocs()
 
 	b.Run("country", func(b *testing.B) {
@@ -159,13 +160,21 @@ func BenchmarkGeoIP2(b *testing.B) {
 		}
 		b.Run("sync", func(b *testing.B) {
 			for i := 0; i < b.N; i++ {
-				_, _ = reader.Lookup(ip)
+				asn, err := reader.Lookup(ip)
+				if err != nil {
+					b.Fatal(err)
+				}
+				runtime.KeepAlive(asn.Network)
 			}
 		})
 		b.Run("parallel", func(b *testing.B) {
 			b.RunParallel(func(pb *testing.PB) {
 				for pb.Next() {
-					_, _ = reader.Lookup(ip)
+					asn, err := reader.Lookup(ip)
+					if err != nil {
+						b.Fatal(err)
+					}
+					runtime.KeepAlive(asn.Network)
 				}
 			})
 		})
