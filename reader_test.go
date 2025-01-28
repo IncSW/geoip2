@@ -396,6 +396,9 @@ func TestASN(t *testing.T) {
 	if record.AutonomousSystemOrganization != "Telstra Pty Ltd" {
 		t.Fatal()
 	}
+	if record.Network != "1.128.0.0/11" {
+		t.Fatal()
+	}
 
 	record, err = reader.Lookup(net.ParseIP("2600:6000::"))
 	if err != nil {
@@ -407,6 +410,10 @@ func TestASN(t *testing.T) {
 	if record.AutonomousSystemOrganization != "Merit Network Inc." {
 		t.Fatal()
 	}
+	if record.Network != "2600:6000::/20" {
+		t.Fatal()
+	}
+
 }
 
 func TestDBIPCity(t *testing.T) {
@@ -485,6 +492,9 @@ func TestDBIPASN(t *testing.T) {
 		t.Fatal()
 	}
 	if record.AutonomousSystemOrganization != "Comcast Cable Communications, LLC" {
+		t.Fatal()
+	}
+	if record.Network != "66.30.0.0/15" {
 		t.Fatal()
 	}
 }
