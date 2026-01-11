@@ -11,7 +11,7 @@ import (
 
 func getNetworkString(ip net.IP, mask uint) string {
 	bitLen := 128
-	for i := 0; i < len(ip); i++ {
+	for i := range ip {
 		if ip[i] != 0 {
 			if i == 10 {
 				bitLen = 32
@@ -249,7 +249,7 @@ func readStringMapMap(buffer []byte, mapSize uint, offset uint) (map[string]stri
 	var dataType byte
 	var size uint
 	result := map[string]string{}
-	for i := uint(0); i < mapSize; i++ {
+	for range mapSize {
 		key, offset, err = readMapKey(buffer, offset)
 		if err != nil {
 			return nil, 0, err
@@ -318,7 +318,7 @@ func readStringSlice(buffer []byte, sliceSize uint, offset uint) ([]string, uint
 	var err error
 	var value string
 	result := make([]string, sliceSize)
-	for i := uint(0); i < sliceSize; i++ {
+	for i := range sliceSize {
 		value, offset, err = readString(buffer, offset)
 		if err != nil {
 			return nil, 0, err

@@ -83,7 +83,7 @@ func BenchmarkGeoIP2(b *testing.B) {
 			b.Fatal(err)
 		}
 		b.Run("sync", func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
+			for range b.N {
 				_, _ = reader.Lookup(ip)
 			}
 		})
@@ -102,7 +102,7 @@ func BenchmarkGeoIP2(b *testing.B) {
 			b.Fatal(err)
 		}
 		b.Run("sync", func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
+			for range b.N {
 				_, _ = reader.Lookup(ip)
 			}
 		})
@@ -121,7 +121,7 @@ func BenchmarkGeoIP2(b *testing.B) {
 			b.Fatal(err)
 		}
 		b.Run("sync", func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
+			for range b.N {
 				_, _ = reader.Lookup(ip)
 			}
 		})
@@ -140,7 +140,7 @@ func BenchmarkGeoIP2(b *testing.B) {
 			b.Fatal(err)
 		}
 		b.Run("sync", func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
+			for range b.N {
 				_, _ = reader.Lookup(ip)
 			}
 		})
@@ -159,7 +159,7 @@ func BenchmarkGeoIP2(b *testing.B) {
 			b.Fatal(err)
 		}
 		b.Run("sync", func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
+			for range b.N {
 				_, _ = reader.Lookup(ip)
 			}
 		})
@@ -178,7 +178,7 @@ func BenchmarkGeoIP2(b *testing.B) {
 			b.Fatal(err)
 		}
 		b.Run("sync", func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
+			for range b.N {
 				_, _ = reader.Lookup(ip)
 			}
 		})
@@ -197,7 +197,7 @@ func BenchmarkGeoIP2(b *testing.B) {
 			b.Fatal(err)
 		}
 		b.Run("sync", func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
+			for range b.N {
 				asn, err := reader.Lookup(ip)
 				if err != nil {
 					b.Fatal(err)
@@ -224,7 +224,7 @@ func BenchmarkGeoIP2(b *testing.B) {
 			b.Fatal(err)
 		}
 		b.Run("sync", func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
+			for range b.N {
 				asn, err := reader.Lookup(ip)
 				if err != nil {
 					b.Fatal(err)

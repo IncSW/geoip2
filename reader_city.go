@@ -25,7 +25,7 @@ func (r *CityReader) Lookup(ip net.IP) (*CityResult, error) {
 	}
 	var key []byte
 	result := &CityResult{}
-	for i := uint(0); i < size; i++ {
+	for range size {
 		key, offset, err = readMapKey(r.decoderBuffer, offset)
 		if err != nil {
 			return nil, err

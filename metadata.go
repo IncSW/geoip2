@@ -29,7 +29,7 @@ func readMetadata(buffer []byte) (*Metadata, error) {
 	}
 	var key []byte
 	metadata := &Metadata{}
-	for i := uint(0); i < metadataSize; i++ {
+	for range metadataSize {
 		key, offset, err = readMapKey(buffer, offset)
 		if err != nil {
 			return nil, err
