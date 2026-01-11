@@ -96,8 +96,46 @@ func BenchmarkGeoIP2(b *testing.B) {
 		})
 	})
 
+	b.Run("country-GeoLite2-Country", func(b *testing.B) {
+		reader, err := NewCountryReaderFromFile("testdata/GeoLite2-Country.mmdb")
+		if err != nil {
+			b.Fatal(err)
+		}
+		b.Run("sync", func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_, _ = reader.Lookup(ip)
+			}
+		})
+		b.Run("parallel", func(b *testing.B) {
+			b.RunParallel(func(pb *testing.PB) {
+				for pb.Next() {
+					_, _ = reader.Lookup(ip)
+				}
+			})
+		})
+	})
+
 	b.Run("city", func(b *testing.B) {
 		reader, err := NewCityReaderFromFile("testdata/maxmind/test-data/GeoIP2-City-Test.mmdb")
+		if err != nil {
+			b.Fatal(err)
+		}
+		b.Run("sync", func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_, _ = reader.Lookup(ip)
+			}
+		})
+		b.Run("parallel", func(b *testing.B) {
+			b.RunParallel(func(pb *testing.PB) {
+				for pb.Next() {
+					_, _ = reader.Lookup(ip)
+				}
+			})
+		})
+	})
+
+	b.Run("city-GeoLite2-City", func(b *testing.B) {
+		reader, err := NewCityReaderFromFile("testdata/GeoLite2-City.mmdb")
 		if err != nil {
 			b.Fatal(err)
 		}
@@ -155,6 +193,33 @@ func BenchmarkGeoIP2(b *testing.B) {
 
 	b.Run("asn", func(b *testing.B) {
 		reader, err := NewASNReaderFromFile("testdata/maxmind/test-data/GeoLite2-ASN-Test.mmdb")
+		if err != nil {
+			b.Fatal(err)
+		}
+		b.Run("sync", func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				asn, err := reader.Lookup(ip)
+				if err != nil {
+					b.Fatal(err)
+				}
+				runtime.KeepAlive(asn.Network)
+			}
+		})
+		b.Run("parallel", func(b *testing.B) {
+			b.RunParallel(func(pb *testing.PB) {
+				for pb.Next() {
+					asn, err := reader.Lookup(ip)
+					if err != nil {
+						b.Fatal(err)
+					}
+					runtime.KeepAlive(asn.Network)
+				}
+			})
+		})
+	})
+
+	b.Run("asn-GeoLite2-ASN", func(b *testing.B) {
+		reader, err := NewASNReaderFromFile("testdata/GeoLite2-ASN.mmdb")
 		if err != nil {
 			b.Fatal(err)
 		}
