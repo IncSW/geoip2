@@ -2,8 +2,8 @@ package geoip2
 
 import (
 	"errors"
-	"io/ioutil"
 	"net"
+	"os"
 	"strconv"
 )
 
@@ -100,7 +100,7 @@ func NewCityReader(buffer []byte) (*CityReader, error) {
 }
 
 func NewCityReaderFromFile(filename string) (*CityReader, error) {
-	buffer, err := ioutil.ReadFile(filename)
+	buffer, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}

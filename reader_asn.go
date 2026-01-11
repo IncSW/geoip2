@@ -2,8 +2,8 @@ package geoip2
 
 import (
 	"errors"
-	"io/ioutil"
 	"net"
+	"os"
 	"strconv"
 )
 
@@ -66,7 +66,7 @@ func NewASNReader(buffer []byte) (*ASNReader, error) {
 }
 
 func NewASNReaderFromFile(filename string) (*ASNReader, error) {
-	buffer, err := ioutil.ReadFile(filename)
+	buffer, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
