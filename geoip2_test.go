@@ -34,6 +34,15 @@ func TestReader(t *testing.T) {
 		"asn": {
 			{db: "GeoLite2-ASN-Test", ip: "81.128.69.160"},
 		},
+		"anonymous_ip": {
+			{db: "GeoIP2-Anonymous-IP-Test", ip: "81.2.69.0"},
+		},
+		"domain": {
+			{db: "GeoIP2-Domain-Test", ip: "1.2.0.0"},
+		},
+		"enterprise": {
+			{db: "GeoIP2-Enterprise-Test", ip: "74.209.24.0"},
+		},
 	}
 	for reader, readerTest := range tests {
 		for _, test := range readerTest {
@@ -74,6 +83,30 @@ func TestReader(t *testing.T) {
 					}
 				case "asn":
 					r, err := NewASNReaderFromFile(dbPath(test.db))
+					if err != nil {
+						t.Fatal(err)
+					}
+					if _, err = r.Lookup(net.ParseIP(test.ip)); err != nil {
+						t.Fatal(err)
+					}
+				case "anonymous_ip":
+					r, err := NewAnonymousIPReaderFromFile(dbPath(test.db))
+					if err != nil {
+						t.Fatal(err)
+					}
+					if _, err = r.Lookup(net.ParseIP(test.ip)); err != nil {
+						t.Fatal(err)
+					}
+				case "domain":
+					r, err := NewDomainReaderFromFile(dbPath(test.db))
+					if err != nil {
+						t.Fatal(err)
+					}
+					if _, err = r.Lookup(net.ParseIP(test.ip)); err != nil {
+						t.Fatal(err)
+					}
+				case "enterprise":
+					r, err := NewEnterpriseReaderFromFile(dbPath(test.db))
 					if err != nil {
 						t.Fatal(err)
 					}
