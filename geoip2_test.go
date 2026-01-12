@@ -7,69 +7,84 @@ import (
 )
 
 func TestReader(t *testing.T) {
-	ip := net.ParseIP("81.2.69.160")
+	t.Parallel()
 
-	countryReader, err := NewCountryReaderFromFile("testdata/maxmind/test-data/GeoIP2-Country-Test.mmdb")
-	if err != nil {
-		t.Fatal(err)
-	}
-	_, err = countryReader.Lookup(ip)
-	if err != nil {
-		t.Fatal(err)
-	}
-	countryLiteReader, err := NewCountryReaderFromFile("testdata/maxmind/test-data/GeoLite2-Country-Test.mmdb")
-	if err != nil {
-		t.Fatal(err)
-	}
-	_, err = countryLiteReader.Lookup(ip)
-	if err != nil {
-		t.Fatal(err)
+	dbPath := func(db string) string {
+		return "testdata/maxmind/test-data/" + db + ".mmdb"
 	}
 
-	cityReader, err := NewCityReaderFromFile("testdata/maxmind/test-data/GeoIP2-City-Test.mmdb")
-	if err != nil {
-		t.Fatal(err)
+	tests := map[string][]struct {
+		db string
+		ip string
+	}{
+		"country": {
+			{db: "GeoIP2-Country-Test", ip: "81.2.69.160"},
+			{db: "GeoLite2-Country-Test", ip: "81.2.69.160"},
+		},
+		"city": {
+			{db: "GeoIP2-City-Test", ip: "81.2.69.160"},
+			{db: "GeoLite2-City-Test", ip: "81.2.69.160"},
+		},
+		"isp": {
+			{db: "GeoIP2-ISP-Test", ip: "81.2.69.160"},
+		},
+		"connection_type": {
+			{db: "GeoIP2-Connection-Type-Test", ip: "2.125.160.216"},
+		},
+		"asn": {
+			{db: "GeoLite2-ASN-Test", ip: "81.128.69.160"},
+		},
 	}
-	_, err = cityReader.Lookup(ip)
-	if err != nil {
-		t.Fatal(err)
-	}
-	cityLiteReader, err := NewCityReaderFromFile("testdata/maxmind/test-data/GeoLite2-City-Test.mmdb")
-	if err != nil {
-		t.Fatal(err)
-	}
-	_, err = cityLiteReader.Lookup(ip)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	ispReader, err := NewISPReaderFromFile("testdata/maxmind/test-data/GeoIP2-ISP-Test.mmdb")
-	if err != nil {
-		t.Fatal(err)
-	}
-	_, err = ispReader.Lookup(ip)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	ip = net.ParseIP("2.125.160.216")
-	connectionTypeReader, err := NewConnectionTypeReaderFromFile("testdata/maxmind/test-data/GeoIP2-Connection-Type-Test.mmdb")
-	if err != nil {
-		t.Fatal(err)
-	}
-	_, err = connectionTypeReader.Lookup(ip)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	ip = net.ParseIP("81.128.69.160")
-	asnReader, err := NewASNReaderFromFile("testdata/maxmind/test-data/GeoLite2-ASN-Test.mmdb")
-	if err != nil {
-		t.Fatal(err)
-	}
-	_, err = asnReader.Lookup(ip)
-	if err != nil {
-		t.Fatal(err)
+	for reader, readerTest := range tests {
+		for _, test := range readerTest {
+			t.Run(test.db, func(t *testing.T) {
+				t.Parallel()
+				switch reader {
+				case "country":
+					r, err := NewCountryReaderFromFile(dbPath(test.db))
+					if err != nil {
+						t.Fatal(err)
+					}
+					if _, err = r.Lookup(net.ParseIP(test.ip)); err != nil {
+						t.Fatal(err)
+					}
+				case "city":
+					r, err := NewCityReaderFromFile(dbPath(test.db))
+					if err != nil {
+						t.Fatal(err)
+					}
+					if _, err = r.Lookup(net.ParseIP(test.ip)); err != nil {
+						t.Fatal(err)
+					}
+				case "isp":
+					r, err := NewISPReaderFromFile(dbPath(test.db))
+					if err != nil {
+						t.Fatal(err)
+					}
+					if _, err = r.Lookup(net.ParseIP(test.ip)); err != nil {
+						t.Fatal(err)
+					}
+				case "connection_type":
+					r, err := NewConnectionTypeReaderFromFile(dbPath(test.db))
+					if err != nil {
+						t.Fatal(err)
+					}
+					if _, err = r.Lookup(net.ParseIP(test.ip)); err != nil {
+						t.Fatal(err)
+					}
+				case "asn":
+					r, err := NewASNReaderFromFile(dbPath(test.db))
+					if err != nil {
+						t.Fatal(err)
+					}
+					if _, err = r.Lookup(net.ParseIP(test.ip)); err != nil {
+						t.Fatal(err)
+					}
+				default:
+					t.Fatal("unknown reader type: " + reader)
+				}
+			})
+		}
 	}
 }
 

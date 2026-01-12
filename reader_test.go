@@ -9,6 +9,7 @@ import (
 )
 
 func TestAnonymousIP(t *testing.T) {
+	t.Parallel()
 	reader, err := NewAnonymousIPReaderFromFile("testdata/maxmind/test-data/GeoIP2-Anonymous-IP-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
@@ -56,13 +57,18 @@ func TestAnonymousIP(t *testing.T) {
 }
 
 func TestReaderZeroLength(t *testing.T) {
-	_, err := newReader([]byte{})
-	if err == nil {
+	t.Parallel()
+	if _, err := newReader(nil); err == nil {
+		t.Fatal()
+	}
+
+	if _, err := newReader([]byte{}); err == nil {
 		t.Fatal()
 	}
 }
 
 func TestCity(t *testing.T) {
+	t.Parallel()
 	reader, err := NewCityReaderFromFile("testdata/maxmind/test-data/GeoIP2-City-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
@@ -133,6 +139,7 @@ func TestCity(t *testing.T) {
 }
 
 func TestConnectionType(t *testing.T) {
+	t.Parallel()
 	reader, err := NewConnectionTypeReaderFromFile("testdata/maxmind/test-data/GeoIP2-Connection-Type-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
@@ -156,6 +163,7 @@ func TestConnectionType(t *testing.T) {
 }
 
 func TestCountry(t *testing.T) {
+	t.Parallel()
 	reader, err := NewCountryReaderFromFile("testdata/maxmind/test-data/GeoIP2-Country-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
@@ -240,6 +248,7 @@ func TestCountry(t *testing.T) {
 }
 
 func TestDomain(t *testing.T) {
+	t.Parallel()
 	reader, err := NewDomainReaderFromFile("testdata/maxmind/test-data/GeoIP2-Domain-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
@@ -263,6 +272,7 @@ func TestDomain(t *testing.T) {
 }
 
 func TestEnterprise(t *testing.T) {
+	t.Parallel()
 	reader, err := NewEnterpriseReaderFromFile("testdata/maxmind/test-data/GeoIP2-Enterprise-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
@@ -340,6 +350,7 @@ func TestEnterprise(t *testing.T) {
 }
 
 func TestISP(t *testing.T) {
+	t.Parallel()
 	reader, err := NewISPReaderFromFile("testdata/maxmind/test-data/GeoIP2-ISP-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
@@ -381,6 +392,7 @@ func TestISP(t *testing.T) {
 }
 
 func TestASN(t *testing.T) {
+	t.Parallel()
 	reader, err := NewASNReaderFromFile("testdata/maxmind/test-data/GeoLite2-ASN-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
