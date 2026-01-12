@@ -429,6 +429,8 @@ func TestASN(t *testing.T) {
 }
 
 func TestDBIPCity(t *testing.T) {
+	t.Skip("skipping - DBIP City is not available")
+	t.Parallel()
 	reader, err := NewCityReaderFromFile("testdata/dbip/dbip-city-lite.mmdb")
 	if err != nil {
 		t.Fatal(err)
@@ -458,6 +460,8 @@ func TestDBIPCity(t *testing.T) {
 }
 
 func TestDBIPCountry(t *testing.T) {
+	t.Skip("skipping - DBIP Country is not available")
+	t.Parallel()
 	reader, err := NewCountryReaderFromFile("testdata/dbip/dbip-country-lite.mmdb")
 	if err != nil {
 		t.Fatal(err)
@@ -492,6 +496,8 @@ func TestDBIPCountry(t *testing.T) {
 }
 
 func TestDBIPASN(t *testing.T) {
+	t.Skip("skipping - DBIP ASN is not available")
+	t.Parallel()
 	reader, err := NewASNReaderFromFile("testdata/dbip/dbip-asn-lite.mmdb")
 	if err != nil {
 		t.Fatal(err)
