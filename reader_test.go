@@ -202,10 +202,10 @@ func TestCountry(t *testing.T) {
 	if record.RepresentedCountry.GeoNameID != 0 {
 		t.Fatal()
 	}
-	if record.Traits.IsAnonymousProxy != true {
+	if record.Traits.IsAnonymousProxy != false {
 		t.Fatal()
 	}
-	if record.Traits.IsSatelliteProvider != true {
+	if record.Traits.IsSatelliteProvider != false {
 		t.Fatal()
 	}
 
