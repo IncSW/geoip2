@@ -109,6 +109,11 @@ func readTraitsMap(traits *Traits, buffer []byte, mapSize uint, offset uint) (ui
 			if err != nil {
 				return 0, err
 			}
+		case "is_anycast":
+			traits.IsAnycast, offset, err = readBool(buffer, offset)
+			if err != nil {
+				return 0, err
+			}
 		default:
 			return 0, errors.New("unknown traits key: " + string(key))
 		}

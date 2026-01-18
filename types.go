@@ -77,6 +77,7 @@ type (
 		MobileNetworkCode            string  // Enterprise
 		IsAnonymousProxy             bool
 		IsSatelliteProvider          bool
+		IsAnycast                    bool
 	}
 
 	CountryResult struct {

@@ -245,6 +245,14 @@ func TestCountry(t *testing.T) {
 	if record.Traits.IsAnonymousProxy != false {
 		t.Fatal()
 	}
+
+	record, err = reader.Lookup(net.ParseIP("214.1.1.0"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if record.Traits.IsAnycast != true {
+		t.Fatal()
+	}
 }
 
 func TestDomain(t *testing.T) {
