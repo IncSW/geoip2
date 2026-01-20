@@ -2,8 +2,8 @@ package geoip2
 
 import (
 	"errors"
-	"io/ioutil"
 	"net"
+	"os"
 	"strconv"
 )
 
@@ -63,7 +63,7 @@ func NewConnectionTypeReader(buffer []byte) (*ConnectionTypeReader, error) {
 }
 
 func NewConnectionTypeReaderFromFile(filename string) (*ConnectionTypeReader, error) {
-	buffer, err := ioutil.ReadFile(filename)
+	buffer, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}

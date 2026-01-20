@@ -2,8 +2,8 @@ package geoip2
 
 import (
 	"errors"
-	"io/ioutil"
 	"net"
+	"os"
 	"strconv"
 )
 
@@ -63,7 +63,7 @@ func NewDomainReader(buffer []byte) (*DomainReader, error) {
 }
 
 func NewDomainReaderFromFile(filename string) (*DomainReader, error) {
-	buffer, err := ioutil.ReadFile(filename)
+	buffer, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}

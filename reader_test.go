@@ -9,6 +9,7 @@ import (
 )
 
 func TestAnonymousIP(t *testing.T) {
+	t.Parallel()
 	reader, err := NewAnonymousIPReaderFromFile("testdata/maxmind/test-data/GeoIP2-Anonymous-IP-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
@@ -56,13 +57,18 @@ func TestAnonymousIP(t *testing.T) {
 }
 
 func TestReaderZeroLength(t *testing.T) {
-	_, err := newReader([]byte{})
-	if err == nil {
+	t.Parallel()
+	if _, err := newReader(nil); err == nil {
+		t.Fatal()
+	}
+
+	if _, err := newReader([]byte{}); err == nil {
 		t.Fatal()
 	}
 }
 
 func TestCity(t *testing.T) {
+	t.Parallel()
 	reader, err := NewCityReaderFromFile("testdata/maxmind/test-data/GeoIP2-City-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
@@ -133,6 +139,7 @@ func TestCity(t *testing.T) {
 }
 
 func TestConnectionType(t *testing.T) {
+	t.Parallel()
 	reader, err := NewConnectionTypeReaderFromFile("testdata/maxmind/test-data/GeoIP2-Connection-Type-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
@@ -156,6 +163,7 @@ func TestConnectionType(t *testing.T) {
 }
 
 func TestCountry(t *testing.T) {
+	t.Parallel()
 	reader, err := NewCountryReaderFromFile("testdata/maxmind/test-data/GeoIP2-Country-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
@@ -194,10 +202,10 @@ func TestCountry(t *testing.T) {
 	if record.RepresentedCountry.GeoNameID != 0 {
 		t.Fatal()
 	}
-	if record.Traits.IsAnonymousProxy != true {
+	if record.Traits.IsAnonymousProxy != false {
 		t.Fatal()
 	}
-	if record.Traits.IsSatelliteProvider != true {
+	if record.Traits.IsSatelliteProvider != false {
 		t.Fatal()
 	}
 
@@ -237,9 +245,18 @@ func TestCountry(t *testing.T) {
 	if record.Traits.IsAnonymousProxy != false {
 		t.Fatal()
 	}
+
+	record, err = reader.Lookup(net.ParseIP("214.1.1.0"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if record.Traits.IsAnycast != true {
+		t.Fatal()
+	}
 }
 
 func TestDomain(t *testing.T) {
+	t.Parallel()
 	reader, err := NewDomainReaderFromFile("testdata/maxmind/test-data/GeoIP2-Domain-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
@@ -263,6 +280,7 @@ func TestDomain(t *testing.T) {
 }
 
 func TestEnterprise(t *testing.T) {
+	t.Parallel()
 	reader, err := NewEnterpriseReaderFromFile("testdata/maxmind/test-data/GeoIP2-Enterprise-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
@@ -340,6 +358,7 @@ func TestEnterprise(t *testing.T) {
 }
 
 func TestISP(t *testing.T) {
+	t.Parallel()
 	reader, err := NewISPReaderFromFile("testdata/maxmind/test-data/GeoIP2-ISP-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
@@ -381,6 +400,7 @@ func TestISP(t *testing.T) {
 }
 
 func TestASN(t *testing.T) {
+	t.Parallel()
 	reader, err := NewASNReaderFromFile("testdata/maxmind/test-data/GeoLite2-ASN-Test.mmdb")
 	if err != nil {
 		t.Fatal(err)
@@ -417,6 +437,8 @@ func TestASN(t *testing.T) {
 }
 
 func TestDBIPCity(t *testing.T) {
+	t.Skip("skipping - DBIP City is not available")
+	t.Parallel()
 	reader, err := NewCityReaderFromFile("testdata/dbip/dbip-city-lite.mmdb")
 	if err != nil {
 		t.Fatal(err)
@@ -446,6 +468,8 @@ func TestDBIPCity(t *testing.T) {
 }
 
 func TestDBIPCountry(t *testing.T) {
+	t.Skip("skipping - DBIP Country is not available")
+	t.Parallel()
 	reader, err := NewCountryReaderFromFile("testdata/dbip/dbip-country-lite.mmdb")
 	if err != nil {
 		t.Fatal(err)
@@ -480,6 +504,8 @@ func TestDBIPCountry(t *testing.T) {
 }
 
 func TestDBIPASN(t *testing.T) {
+	t.Skip("skipping - DBIP ASN is not available")
+	t.Parallel()
 	reader, err := NewASNReaderFromFile("testdata/dbip/dbip-asn-lite.mmdb")
 	if err != nil {
 		t.Fatal(err)

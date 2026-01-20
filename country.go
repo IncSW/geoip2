@@ -38,7 +38,7 @@ func readCountry(country *Country, buffer []byte, offset uint) (uint, error) {
 func readCountryMap(country *Country, buffer []byte, mapSize uint, offset uint) (uint, error) {
 	var key []byte
 	var err error
-	for i := uint(0); i < mapSize; i++ {
+	for range mapSize {
 		key, offset, err = readMapKey(buffer, offset)
 		if err != nil {
 			return 0, err

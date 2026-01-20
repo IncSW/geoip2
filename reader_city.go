@@ -2,8 +2,8 @@ package geoip2
 
 import (
 	"errors"
-	"io/ioutil"
 	"net"
+	"os"
 	"strconv"
 )
 
@@ -25,7 +25,7 @@ func (r *CityReader) Lookup(ip net.IP) (*CityResult, error) {
 	}
 	var key []byte
 	result := &CityResult{}
-	for i := uint(0); i < size; i++ {
+	for range size {
 		key, offset, err = readMapKey(r.decoderBuffer, offset)
 		if err != nil {
 			return nil, err
@@ -100,7 +100,7 @@ func NewCityReader(buffer []byte) (*CityReader, error) {
 }
 
 func NewCityReaderFromFile(filename string) (*CityReader, error) {
-	buffer, err := ioutil.ReadFile(filename)
+	buffer, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
